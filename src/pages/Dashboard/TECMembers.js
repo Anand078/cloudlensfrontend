@@ -55,13 +55,31 @@ const TECMember = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
   const [initialData, setInitialData] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
 
   const [isSaving, setIsSaving] = useState(false)
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
+
+  const filteredData = data.filter(item => {
+    const member = item.member ? item.member.toLowerCase() : ""
+    const project = item.project ? item.project.toLowerCase() : ""
+    const comments = item.comments ? item.comments.toLowerCase() : ""
+
+    return (
+      member.includes(searchTerm.toLowerCase()) ||
+      project.includes(searchTerm.toLowerCase()) ||
+      comments.includes(searchTerm.toLowerCase())
+    )
+  })
+
+  const handleSearchChange = event => {
+    setSearchTerm(event.target.value)
+  }
+
+  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem)
 
   const [isTimelineModalOpen, setTimelineModalOpen] = useState(false)
   const activityData = [
@@ -361,6 +379,12 @@ const TECMember = () => {
                 gap: "0.3rem",
               }}
             >
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
               <Button color="primary" onClick={handleAddRow}>
                 <i className="ion ion-md-add"></i>
               </Button>
@@ -442,7 +466,7 @@ const TECMember = () => {
                             onColor="#02a499"
                             onChange={() => handleSwitchChange(item.id)}
                             checked={Boolean(switches[item.id])}
-                            height={22}
+                            height={19}
                           />
                         </td>
                         <td
