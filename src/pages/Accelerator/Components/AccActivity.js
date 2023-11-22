@@ -50,7 +50,7 @@ const AccActivityModal = ({
           }
         } else {
           console.warn(
-            "selectedAcceleratorId is null or undefined. Skipping API call."
+            "selectedAcceleratorId is null or undefined. Skipping API call"
           )
         }
       } catch (error) {
