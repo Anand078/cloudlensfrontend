@@ -384,7 +384,9 @@ const TECMember = () => {
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                style={{ width: "15rem" }}
               />
+
               <Button color="primary" onClick={handleAddRow}>
                 <i className="ion ion-md-add"></i>
               </Button>

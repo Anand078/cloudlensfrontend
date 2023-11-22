@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { Table, Button, Row, Col, Spinner, Container, Input } from "reactstrap"
 import Pagination from "react-js-pagination"
 import ActivityModal from "./AccActivity"
+import isEqual from "lodash/isEqual"
 
 const useEditableState = (data, initialValue = false) => {
   return data.reduce((acc, item) => {
@@ -38,7 +39,7 @@ const AccSnap = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(5)
+  const [itemsPerPage] = useState(10)
   const [editableState, setEditableState] = useState({
     accNames: useEditableState(data),
     versions: useEditableState(data),
@@ -257,6 +258,57 @@ const AccSnap = () => {
     setSearchTerm(event.target.value)
   }
 
+  const handleSave = async () => {
+    try {
+      debugger;
+      setIsSaving(true)
+
+      const modifiedData = data.filter(
+        item =>
+          !isEqual(
+            item,
+            initialData.find(initialItem => initialItem.id === item.id)
+          )
+      )
+
+      console.log("mod", modifiedData)
+
+      if (modifiedData.length > 0) {
+        await saveData(modifiedData)
+        fetchData()
+      } else {
+        console.log("No changes to save.")
+      }
+    } catch (error) {
+      console.error("Error saving data:", error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const saveData = async modifiedData => {
+    try {
+      const response = await fetch(baseUrl + "/accsnap", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(modifiedData),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save data")
+      }
+    } catch (error) {
+      console.error("Error saving data:", error)
+    }
+  }
+
   return (
     <>
       {isLoading ? (
@@ -285,11 +337,12 @@ const AccSnap = () => {
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                style={{ width: "15rem" }}
               />
               <Button color="primary" onClick={handleAddRow}>
                 <i className="ion ion-md-add"></i>
               </Button>
-              <Button color="primary" disabled={isSaving}>
+              <Button color="primary" disabled={isSaving} onClick={handleSave}>
                 {isSaving ? (
                   <Spinner size="sm" color="light" />
                 ) : (
