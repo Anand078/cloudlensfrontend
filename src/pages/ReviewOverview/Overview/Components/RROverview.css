@@ -1,0 +1,43 @@
+.pillar-bar {
+    width: 5px; /* Set the width of the red bar */
+    background-color: #0e8cfe; /* Set the background color to red */
+    height: 100%;
+    position: absolute; 
+    top: 0;
+    left: 0; 
+
+  }
+
+  .topic-bar {
+    width: 5px; /* Set the width of the red bar */
+    background-color: #e46a3f; /* Set the background color to red */
+    height: 100%; /* Set the height to 100% to fill the left corner */
+    position: absolute; /* Position the bar relative to the Card */
+    top: 0; /* Align the top of the bar with the top of the Card */
+    left: 0; /* Align the left of the bar with the left of the Card */
+  }
+  
+  
+  .choice-bar {
+    width: 5px; /* Set the width of the red bar */
+    background-color: #670176; /* Set the background color to red */
+    height: 100%; /* Set the height to 100% to fill the left corner */
+    position: absolute; /* Position the bar relative to the Card */
+    top: 0; /* Align the top of the bar with the top of the Card */
+    left: 0; /* Align the left of the bar with the left of the Card */
+  }
+
+  /* Add these styles to your component's stylesheet */
+.custom-bar-1 {
+  stroke: #11249b; /* Change this to your desired color for the first bar */
+}
+
+.custom-bar-2 {
+  stroke: #0f8ef4; /* Change this to your desired color for the second bar */
+}
+
+.custom-bar-3 {
+  stroke: #e76b33; /* Change this to your desired color for the third bar */
+}
+
+
