@@ -82,33 +82,15 @@ const TECMember = () => {
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem)
 
   const [isTimelineModalOpen, setTimelineModalOpen] = useState(false)
-  const activityData = [
-    {
-      date: "Nov 10 1:30PM",
-      text: "Had a staring contest with the 'Loading...' spinner. It blinked first.",
-    },
-    {
-      date: "Nov 8 4:45PM",
-      text: "Tried to explain code to a rubber duck. The duck looked confused but nodded in agreement.",
-    },
-    {
-      date: "Nov 6 10:15AM",
-      text: "Accidentally pushed code to production while practicing my drumming on the keyboard. Surprisingly, no one noticed.",
-    },
-    {
-      date: "Nov 4 3:20PM",
-      text: "Attended a 'Stand-up' meeting while actually lying down. Nailed it!",
-    },
-  ]
 
   const [selectedProject, setSelectedProject] = useState(null)
-
-  const toggleTimlineModal = project => {
+  const [selectedTecId, setSelectedTecId] = useState(null)
+  const toggleTimlineModal = (id, project) => {
     setTimelineModalOpen(!isTimelineModalOpen)
-    setSelectedProject(project) // Store the selected project
+    setSelectedProject(project)
+    setSelectedTecId(id)
   }
 
-  // Change page
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
   }
@@ -309,6 +291,32 @@ const TECMember = () => {
       if (!response.ok) {
         throw new Error("Failed to save data")
       }
+      const tectimelineData = modifiedData.map(
+        ({ id, comments, updatedon }) => ({
+          tecid: id,
+          comments,
+          updatedon,
+        })
+      )
+
+      console.log("mm", tectimelineData)
+      const tecResponse = await fetch(baseUrl + "/tectimeline", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(tectimelineData),
+      })
+
+      if (!tecResponse.ok) {
+        throw new Error("Failed to save tec timeline data")
+      }
+      console.log("saved successfully")
     } catch (error) {
       console.error("Error saving data:", error)
     }
@@ -416,6 +424,7 @@ const TECMember = () => {
                       <th scope="col">Project</th>
                       <th scope="col">Availability</th>
                       <th scope="col">Comments</th>
+                      <th scope="col">Core Skills</th>
                       <th scope="col">Last updated</th>
                       <th scope="col">Activity</th>
                     </tr>
@@ -473,6 +482,7 @@ const TECMember = () => {
                         </td>
                         <td
                           className="text-left"
+                          style={{ whiteSpace: "pre-line" }}
                           onDoubleClick={() =>
                             handleCommentsEditToggle(item.id)
                           }
@@ -491,6 +501,7 @@ const TECMember = () => {
                             item.comments
                           )}
                         </td>
+                        <td className="text-left"></td>
                         <td className="text-left">
                           {new Date(item.updatedon).toLocaleDateString()}
                         </td>
@@ -502,7 +513,9 @@ const TECMember = () => {
                               fontSize: "22px",
                             }}
                             className="ion ion-md-time"
-                            onClick={() => toggleTimlineModal(item.project)}
+                            onClick={() =>
+                              toggleTimlineModal(item?.id, item?.project)
+                            }
                           />
                         </td>
                       </tr>
@@ -512,7 +525,7 @@ const TECMember = () => {
                 <TimelineModal
                   isOpen={isTimelineModalOpen}
                   toggle={() => toggleTimlineModal(null)}
-                  activityData={activityData}
+                  selectedTecId={selectedTecId}
                   selectedProject={selectedProject}
                 />
               </div>

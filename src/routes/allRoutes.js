@@ -101,9 +101,9 @@ const userRoutes = [
   //Accelerator
   { path: "acc-overview", component: <AccOverview /> },
   //Architecture Review
-  { path: "arc-overview", component: <ArbOverview /> },
+  { path: "arb/overview", component: <ArbOverview /> },
   //Review Overview
-  { path: "rev-overview/", component: <ReviewOverview /> },
+  { path: "rev-overview", component: <ReviewOverview /> },
   //Review Report
   { path: "rev-report/", component: <ReviewReport /> },
   //-----------------our routes----------------------------

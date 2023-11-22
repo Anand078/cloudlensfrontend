@@ -172,7 +172,7 @@ const Navbar = props => {
                   <div
                     className={classname("dropdown-menu", { show: component })}
                   >
-                    <Link to="/arc-overview" className="dropdown-item">
+                    <Link to="/arb/overview" className="dropdown-item">
                       {props.t("Overview")}
                     </Link>
                     <Link to="/arc-list" className="dropdown-item">

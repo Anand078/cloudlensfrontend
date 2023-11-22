@@ -13,7 +13,7 @@ const OverViewCont = () => {
             maintitle="Dashboard"
             title="Architecture Review"
             breadcrumbItem="Overview"
-            path="/arc-overview"
+            path="/arb/overview"
           />
           <Row>
             <Col

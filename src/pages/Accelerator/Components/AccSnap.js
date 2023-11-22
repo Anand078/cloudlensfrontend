@@ -260,7 +260,7 @@ const AccSnap = () => {
 
   const handleSave = async () => {
     try {
-      debugger;
+      debugger
       setIsSaving(true)
 
       const modifiedData = data.filter(

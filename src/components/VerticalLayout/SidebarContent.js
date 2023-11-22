@@ -45,7 +45,7 @@ const Arconfig = {
   subdata: [
     {
       title: "Overview",
-      link: "/arc-overview",
+      link: "/arb/overview",
     },
     {
       title: "List",
@@ -229,7 +229,7 @@ const SidebarContent = props => {
             <SidebarItem
               props={props}
               icon={"mdi mdi-billboard"}
-              link={"/arc-overview"}
+              link={"/arb/overview"}
               title={"Architecture Review"}
             />
 
