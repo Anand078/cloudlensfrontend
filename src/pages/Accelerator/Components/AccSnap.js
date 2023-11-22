@@ -60,9 +60,11 @@ const AccSnap = () => {
 
   const [isActivityModalOpen, setActivityModalOpen] = useState(false)
   const [selectedAccName, setSelectedAccName] = useState(null)
+  const [selectedAcceleratorId, setSelectedAcceleratorId] = useState(null)
 
-  const toggleActivityModal = accname => {
+  const toggleActivityModal = (accid, accname) => {
     setActivityModalOpen(!isActivityModalOpen)
+    setSelectedAcceleratorId(accid)
     setSelectedAccName(accname)
   }
 
@@ -304,6 +306,31 @@ const AccSnap = () => {
       if (!response.ok) {
         throw new Error("Failed to save data")
       }
+      const acctimelineData = modifiedData.map(
+        ({ id, comments, updatedon }) => ({
+          accid: id,
+          comments,
+          updatedon,
+        })
+      )
+
+      const accResponse = await fetch(baseUrl + "/acctimeline", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(acctimelineData),
+      })
+
+      if (!accResponse.ok) {
+        throw new Error("Failed to save acc timeline data")
+      }
+      console.log("saved successfully")
     } catch (error) {
       console.error("Error saving data:", error)
     }
@@ -497,7 +524,9 @@ const AccSnap = () => {
                               fontSize: "22px",
                             }}
                             className="ion ion-md-time"
-                            onClick={() => toggleActivityModal(item.accname)}
+                            onClick={() =>
+                              toggleActivityModal(item.id, item.accname)
+                            }
                           />
                         </td>
                       </tr>
@@ -508,7 +537,8 @@ const AccSnap = () => {
                   isOpen={isActivityModalOpen}
                   toggle={() => toggleActivityModal(null)}
                   activityData={activityData}
-                  selectedProject={selectedAccName}
+                  selectedAcceleratorId={selectedAcceleratorId}
+                  selectedAccelerator={selectedAccName}
                 />
               </div>
             </Col>
