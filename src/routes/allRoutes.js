@@ -103,9 +103,9 @@ const userRoutes = [
   //Architecture Review
   { path: "arb/overview", component: <ArbOverview /> },
   //Review Overview
-  { path: "rev-overview", component: <ReviewOverview /> },
+  { path: "arb/:projectname/overview", component: <ReviewOverview /> },
   //Review Report
-  { path: "rev-report/", component: <ReviewReport /> },
+  { path: "arb/:projectname/review", component: <ReviewReport /> },
   //-----------------our routes----------------------------
 
   // //profile

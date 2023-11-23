@@ -25,7 +25,7 @@ function RROverview() {
   const navigate = useNavigate()
   const baseUrl = process.env.REACT_APP_BASE_URL
   const handleReviewPage = row => {
-    navigate(`/rev-report`, { state: row })
+    navigate(`/arb/${row.projectname}/review`, { state: row })
   }
 
   return (

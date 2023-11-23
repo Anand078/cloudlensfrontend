@@ -30,7 +30,7 @@ const OnSymbol = () => (
       height: "100%",
       fontSize: 12,
       color: "#fff",
-      paddingRight: 2,
+      paddingRight: 0,
     }}
   >
     Yes
@@ -468,7 +468,10 @@ const TECMember = () => {
                             item.project
                           )}
                         </td>
-                        <td className="text-left">
+                        <td
+                          className="text-left"
+                          style={{ paddingLeft: "22px" }}
+                        >
                           <Switch
                             uncheckedIcon={<OffSymbol />}
                             name="isavailable"
@@ -478,6 +481,7 @@ const TECMember = () => {
                             onChange={() => handleSwitchChange(item.id)}
                             checked={Boolean(switches[item.id])}
                             height={19}
+                            width={44}
                           />
                         </td>
                         <td

@@ -9,17 +9,17 @@ const OverViewCont = id => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumb
+          {/* <Breadcrumb
             maintitle="AMS Dashboard"
             title="Review Overview"
             breadcrumbItem="Review Report"
-            path={`/rev-overview`}
-          />
+            path={`arb/:projectname/review`}
+          /> */}
           <Row>
             <Col
               xs="12"
-              className="d-flex justify-content-center align-items-center"
-              style={{ minHeight: "60vh" }}
+              className="d-flex justify-content-center align-items-center mt-3"
+              style={{ minHeight: "60vh", }}
             >
               <RRReport />
             </Col>

@@ -137,7 +137,7 @@ function AccountOverview() {
     getData && setIsModalOpen(!isModalOpen)
   }
   const handleNavigate = row => {
-    navigate(`/rev-overview`, { state: row })
+    navigate(`/arb/${row.projectname}/overview`, { state: row })
   }
 
   const getProjectNameCell = rowData => (
@@ -148,7 +148,7 @@ function AccountOverview() {
 
   const getEditCell = rowData => (
     <i
-      className="mdi mdi-book-edit-outline"
+      className="typcn typcn-edit"
       style={{ fontSize: "1.5rem", cursor: "pointer" }}
       onClick={() => {
         setEditRowData(rowData)
