@@ -54,7 +54,6 @@ import UiRangeSlider from "../pages/Ui/UiRangeSlider"
 import PagesTimeline from "../pages/Utility/pages-timeline"
 import PagesInvoice from "../pages/Utility/PagesInvoice"
 import PagesFaqs from "../pages/Utility/pages-faqs"
-import PagesGallery from "../pages/Utility/PagesGallery"
 import PagesDirectory from "../pages/Utility/PagesDirectory"
 //-----------------our routes----------------------------
 import CapOverview from "pages/Capabilities/Overview"
@@ -131,7 +130,6 @@ const userRoutes = [
   { path: "/pages-invoice", component: <PagesInvoice /> },
   { path: "/pages-directory", component: <PagesDirectory /> },
   { path: "/pages-faqs", component: <PagesFaqs /> },
-  { path: "/pages-gallery", component: <PagesGallery /> },
 
   // this route should be at the end of all other routes
   { path: "/", component: <Dashboard /> },

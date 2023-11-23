@@ -412,9 +412,6 @@ const SidebarContent = (props) => {
                   <Link to="/pages-directory">{("Directory")}</Link>
                 </li>
                 <li>
-                  <Link to="/pages-gallery">{("Gallery")}</Link>
-                </li>
-                <li>
                   <Link to="/pages-faqs">{("FAQs")}</Link>
                 </li>
               </ul>
