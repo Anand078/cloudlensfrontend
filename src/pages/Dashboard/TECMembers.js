@@ -422,9 +422,9 @@ const TECMember = () => {
                     <tr>
                       <th scope="col">TEC Member</th>
                       <th scope="col">Project</th>
+                      <th scope="col">Core Skills</th>
                       <th scope="col">Availability</th>
                       <th scope="col">Comments</th>
-                      <th scope="col">Core Skills</th>
                       <th scope="col">Last updated</th>
                       <th scope="col">Activity</th>
                     </tr>
@@ -450,6 +450,7 @@ const TECMember = () => {
                             item.member
                           )}
                         </td>
+
                         <td
                           className="text-left"
                           onDoubleClick={() => handleProjectEditToggle(item.id)}
@@ -468,6 +469,7 @@ const TECMember = () => {
                             item.project
                           )}
                         </td>
+                        <td className="text-left"></td>
                         <td
                           className="text-left"
                           style={{ paddingLeft: "22px" }}
@@ -505,7 +507,7 @@ const TECMember = () => {
                             item.comments
                           )}
                         </td>
-                        <td className="text-left"></td>
+
                         <td className="text-left">
                           {new Date(item.updatedon).toLocaleDateString()}
                         </td>

@@ -231,7 +231,7 @@ function AccountOverview() {
 
   const getEditCell = item => (
     <i
-      className="mdi mdi-book-edit-outline"
+      className="typcn typcn-edit"
       style={{ fontSize: "1.5rem", cursor: "pointer" }}
       onClick={() => toggleModal(item)}
     ></i>

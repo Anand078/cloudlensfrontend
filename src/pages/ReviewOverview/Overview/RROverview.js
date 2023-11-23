@@ -10,8 +10,8 @@ import {
   Button,
 } from "reactstrap"
 import "./Components/RROverview.css"
-import { Link, useNavigate } from "react-router-dom"
-import RatingTooltip from "react-rating-tooltip"
+import { useNavigate } from "react-router-dom"
+import Rating from "react-rating"
 import CountOfChoice from "./Components/piechart"
 import Bar from "./Components/ChoicePillarChart"
 import ReviewChart from "./Components/ReviewPillarChart"
@@ -43,9 +43,7 @@ function RROverview() {
             <Col lg={12}>
               <Card>
                 <CardBody className="d-flex button-items">
-                  <div className="flex-grow-1">
-                    {" "}
-                  </div>
+                  <div className="flex-grow-1"> </div>
                   <Button
                     color="primary"
                     className="btn btn-primary waves-effect waves-light"
@@ -124,24 +122,23 @@ function RROverview() {
                 <Card>
                   <CardBody>
                     <CardTitle className="h4 mb-4">Project Rating</CardTitle>
-                    <RatingTooltip
-                      className="w-100"
-                      max={5}
-                      value={2}
+                    <Rating
                       ActiveComponent={
                         <i
-                          key={"active_1"}
+                          key={"active_3"}
                           className="mdi mdi-star text-primary"
                           style={starStyle}
                         />
                       }
                       InActiveComponent={
                         <i
-                          key={"active_01"}
+                          key={"active_03"}
                           className="mdi mdi-star-outline text-muted"
                           style={starStyle}
                         />
                       }
+                      readonly={true}
+                      initialRating={3}
                     />
                   </CardBody>
                 </Card>
