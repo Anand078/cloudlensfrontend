@@ -5,7 +5,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL
 
   const [apiData, setApiData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const isMounted = useRef(true)
 
   const formatDateTime = dateTimeString => {
@@ -29,6 +29,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
 
     const fetchData = async () => {
       try {
+        setLoading(true)
         if (selectedTecId != null) {
           const response = await fetch(
             baseUrl + "/tectimeline/" + selectedTecId,

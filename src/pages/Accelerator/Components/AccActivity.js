@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap"
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
 
 const AccActivityModal = ({
   isOpen,
@@ -7,34 +7,33 @@ const AccActivityModal = ({
   selectedAcceleratorId,
   selectedAccelerator,
 }) => {
-  debugger
-  const baseUrl = process.env.REACT_APP_BASE_URL
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const [apiData, setApiData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const isMounted = useRef(true)
+  const [apiData, setApiData] = useState([]);
+  const [loading, setLoading] = useState(false); // Set to false initially
+  const isMounted = useRef(true);
 
-  const formatDateTime = dateTimeString => {
+  const formatDateTime = (dateTimeString) => {
     const options = {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }
+    };
     const formattedDate = new Date(dateTimeString).toLocaleString(
       "en-US",
       options
-    )
-    return formattedDate
-  }
+    );
+    return formattedDate;
+  };
 
   useEffect(() => {
-    debugger
-    isMounted.current = true
-    const abortController = new AbortController()
+    isMounted.current = true;
+    const abortController = new AbortController();
 
     const fetchData = async () => {
+      setLoading(true); // Set loading to true when fetching data begins
       try {
         if (selectedAcceleratorId != null) {
           const response = await fetch(
@@ -42,44 +41,45 @@ const AccActivityModal = ({
             {
               signal: abortController.signal,
             }
-          )
-          const data = await response.json()
-          console.log("API Response:", data.data)
+          );
+          const data = await response.json();
+          console.log("API Response:", data.data);
           if (isMounted.current) {
-            setApiData(data.data)
+            setApiData(data.data);
           }
         } else {
           console.warn(
             "selectedAcceleratorId is null or undefined. Skipping API call"
-          )
+          );
         }
       } catch (error) {
         if (error.name === "AbortError") {
-          console.log("Fetch aborted")
+          console.log("Fetch aborted");
         } else {
-          console.error("Error fetching data from the API:", error)
+          console.error("Error fetching data from the API:", error);
         }
       } finally {
         if (isMounted.current) {
-          setLoading(false)
+          setLoading(false);
         }
       }
-    }
+    };
 
-    fetchData()
+    fetchData();
 
     return () => {
-      isMounted.current = false
-      abortController.abort()
-    }
-  }, [selectedAcceleratorId])
+      isMounted.current = false;
+      abortController.abort();
+    };
+  }, [selectedAcceleratorId]);
 
   useEffect(() => {
     if (!isOpen) {
-      setApiData([])
+      setApiData([]);
     }
-  }, [isOpen])
-  console.log("Data", apiData)
+  }, [isOpen]);
+
+  console.log("Data", apiData);
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered>
       <ModalHeader toggle={toggle}>
@@ -113,7 +113,7 @@ const AccActivityModal = ({
         )}
       </ModalBody>
     </Modal>
-  )
-}
+  );
+};
 
-export default AccActivityModal
+export default AccActivityModal;
