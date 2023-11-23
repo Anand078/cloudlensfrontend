@@ -1,5 +1,5 @@
-import PropTypes from "prop-types"
-import React, { useState } from "react"
+import PropTypes from "prop-types";
+import React, { useState } from "react";
 import {
   Container,
   Row,
@@ -12,40 +12,39 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
-} from "reactstrap"
-import { Link } from "react-router-dom"
-import TEC from "./TECMembers"
+} from "reactstrap";
+import { Link } from "react-router-dom";
+import TEC from "./TECMembers";
 // Custom Scrollbar
-import SimpleBar from "simplebar-react"
-import CountUp from "react-countup"
+import SimpleBar from "simplebar-react";
+import CountUp from "react-countup";
 // import images
-import user2 from "../../assets/images/users/user-2.jpg"
-import user3 from "../../assets/images/users/user-3.jpg"
-import user4 from "../../assets/images/users/user-4.jpg"
-import user5 from "../../assets/images/users/user-5.jpg"
-import user6 from "../../assets/images/users/user-6.jpg"
-import smimg1 from "../../assets/images/small/img-1.jpg"
-import smimg2 from "../../assets/images/small/img-2.jpg"
+import user2 from "../../assets/images/users/user-2.jpg";
+import user3 from "../../assets/images/users/user-3.jpg";
+import user4 from "../../assets/images/users/user-4.jpg";
+import user5 from "../../assets/images/users/user-5.jpg";
+import user6 from "../../assets/images/users/user-6.jpg";
+import smimg1 from "../../assets/images/small/img-1.jpg";
+import smimg2 from "../../assets/images/small/img-2.jpg";
 
 // Charts
-import LineAreaChart from "../AllCharts/apex/lineareachart"
-import RadialChart from "../AllCharts/apex/apexdonut"
-import Apexdonut from "../AllCharts/apex/apexdonut1"
-import SparkLine from "../AllCharts/sparkline/sparkline"
-import SparkLine1 from "../AllCharts/sparkline/sparkline1"
-import Salesdonut from "../AllCharts/apex/salesdonut"
+import LineAreaChart from "../AllCharts/apex/lineareachart";
+import RadialChart from "../AllCharts/apex/apexdonut";
+import Apexdonut from "../AllCharts/apex/apexdonut1";
+import SparkLine from "../AllCharts/sparkline/sparkline";
+import SparkLine1 from "../AllCharts/sparkline/sparkline1";
+import Salesdonut from "../AllCharts/apex/salesdonut";
 
-import "chartist/dist/scss/chartist.scss"
+import "chartist/dist/scss/chartist.scss";
 
 //i18n
-import { withTranslation } from "react-i18next"
 
-const Dashboard = props => {
-  const [menu, setMenu] = useState(false)
+const Dashboard = (props) => {
+  const [menu, setMenu] = useState(false);
   const toggle = () => {
-    setMenu(!menu)
-  }
-  document.title = "Team AMS | Dashboard"
+    setMenu(!menu);
+  };
+  document.title = "Team AMS | Dashboard";
   return (
     <React.Fragment>
       <div className="page-content">
@@ -222,11 +221,10 @@ const Dashboard = props => {
             <Col xl={12}>
               <Card>
                 <CardBody>
-                 
                   <Row>
                     <Col lg={12}>
                       <div>
-                        <TEC/>
+                        <TEC />
                       </div>
                     </Col>
                   </Row>
@@ -689,11 +687,11 @@ const Dashboard = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 Dashboard.propTypes = {
   t: PropTypes.any,
-}
+};
 
-export default withTranslation()(Dashboard)
+export default Dashboard;

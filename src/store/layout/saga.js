@@ -137,15 +137,6 @@ function* changeLeftSidebarType({ payload: { sidebarType, isMobile } }) {
 }
 
 /**
- * Show the rightsidebar
- */
-function* showRightSidebar() {
-  try {
-    yield call(manageBodyClass, "right-bar-enabled", "add");
-  } catch (error) { }
-}
-
-/**
  * Watchers
  */
 export function* watchChangeLayoutType() {
@@ -168,9 +159,6 @@ export function* watchChangeTopbarTheme() {
   yield takeEvery(CHANGE_TOPBAR_THEME, changeTopbarTheme);
 }
 
-export function* watchShowRightSidebar() {
-  yield takeEvery(SHOW_RIGHT_SIDEBAR, showRightSidebar);
-}
 
 function* LayoutSaga() {
   yield all([
@@ -178,7 +166,6 @@ function* LayoutSaga() {
     fork(watchChangeLayoutWidth),
     fork(watchChangeLeftSidebarTheme),
     fork(watchChangeLeftSidebarType),
-    fork(watchShowRightSidebar),
     fork(watchChangeTopbarTheme),
   ]);
 }

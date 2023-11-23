@@ -1,37 +1,23 @@
-import PropTypes from 'prop-types';
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import React from "react";
 
 import { connect } from "react-redux";
-import { Form, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Input, Button } from "reactstrap";
 
 import { Link } from "react-router-dom";
-
-// Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
-import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown";
-import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 
 import logodarkImg from "../../assets/images/logo-light.png";
 import logosmImg from "../../assets/images/logo-sm.png";
 import logolightImg from "../../assets/images/logo-light.png";
 
-
 //i18n
-import { withTranslation } from "react-i18next";
 
 // Redux Store
 import {
-  showRightSidebarAction,
   toggleLeftmenu,
   changeSidebarType,
 } from "../../store/actions";
 
-const Header = props => {
-  const [search, setsearch] = useState(false);
-  const [singlebtn, setSinglebtn] = useState(false);
-
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
+const Header = (props) => {
   function toggleFullscreen() {
     if (
       !document.fullscreenElement &&
@@ -93,7 +79,9 @@ const Header = props => {
                 </span>
               </Link>
             </div>
-            <button type="button" className="btn btn-sm px-3 font-size-24 header-item waves-effect"
+            <button
+              type="button"
+              className="btn btn-sm px-3 font-size-24 header-item waves-effect"
               id="vertical-menu-btn"
               onClick={() => {
                 tToggle();
@@ -117,9 +105,6 @@ const Header = props => {
                 <i className="mdi mdi-fullscreen"></i>
               </button>
             </div>
-
-            <NotificationDropdown />
-            <ProfileMenu />
           </div>
         </div>
       </header>
@@ -131,24 +116,17 @@ Header.propTypes = {
   changeSidebarType: PropTypes.func,
   leftMenu: PropTypes.any,
   leftSideBarType: PropTypes.any,
-  showRightSidebar: PropTypes.any,
-  showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
-  toggleLeftmenu: PropTypes.func
+  toggleLeftmenu: PropTypes.func,
 };
 
-const mapStatetoProps = state => {
-  const {
-    layoutType,
-    showRightSidebar,
-    leftMenu,
-    leftSideBarType,
-  } = state.Layout;
-  return { layoutType, showRightSidebar, leftMenu, leftSideBarType };
+const mapStatetoProps = (state) => {
+  const { layoutType, leftMenu, leftSideBarType } =
+    state.Layout;
+  return { layoutType, leftMenu, leftSideBarType };
 };
 
 export default connect(mapStatetoProps, {
-  showRightSidebarAction,
   toggleLeftmenu,
   changeSidebarType,
-})(withTranslation()(Header));
+})(Header);

@@ -9,14 +9,12 @@ import {
   changeSidebarType,
   changeTopbarTheme,
   changeLayoutWidth,
-  showRightSidebarAction
 } from "../../store/actions";
 
 // Layout Related Components
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
-import Rightbar from "../CommonForBoth/Rightbar";
 
 class Layout extends Component {
   constructor(props) {
@@ -25,7 +23,6 @@ class Layout extends Component {
       isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
     };
     this.toggleMenuCallback = this.toggleMenuCallback.bind(this);
-    this.hideRightbar = this.hideRightbar.bind(this);
   }
 
   capitalizeFirstLetter = string => {
@@ -38,10 +35,6 @@ class Layout extends Component {
     window.scrollTo(0, 0);
     // let currentage = this.capitalizeFirstLetter(this.props.location.pathname)
 
-    document.body.addEventListener("click", this.hideRightbar, true);
-
-    // document.title =
-    //   currentage + " | Veltrix - React Admin & Dashboard Template"
     if (this.props.leftSideBarTheme) {
       this.props.changeSidebarTheme(this.props.leftSideBarTheme);
     }
@@ -65,18 +58,6 @@ class Layout extends Component {
     }
   };
 
-  hideRightbar = (event) => {
-    var rightbar = document.getElementById("right-bar");
-    //if clicked in inside right bar, then do nothing
-    if (rightbar && rightbar.contains(event.target)) {
-      return;
-    } else {
-      if (document.body.classList.contains('right-bar-enabled')) {
-        this.props.showRightSidebarAction(false);
-      }
-    }
-  };
-
   render() {
     return (
       <React.Fragment>
@@ -90,7 +71,6 @@ class Layout extends Component {
           <div className="main-content">{this.props.children}</div>
           <Footer />
         </div>
-        {this.props.showRightSidebar ? <Rightbar /> : null}
       </React.Fragment>
     );
   }
@@ -106,8 +86,6 @@ Layout.propTypes = {
   leftSideBarTheme: PropTypes.any,
   leftSideBarType: PropTypes.any,
   location: PropTypes.object,
-  showRightSidebar: PropTypes.any,
-  showRightSidebarAction: PropTypes.func,
   topbarTheme: PropTypes.any
 };
 
@@ -122,5 +100,4 @@ export default connect(mapStatetoProps, {
   changeSidebarType,
   changeTopbarTheme,
   changeLayoutWidth,
-  showRightSidebarAction
 })(withRouter(Layout));

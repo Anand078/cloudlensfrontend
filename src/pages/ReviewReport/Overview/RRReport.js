@@ -205,7 +205,8 @@ function RRReport() {
                         <Col sm="12" className="div-height-width">
                           <label className="form-label">
                             {currentTopicIndex + 1} {". "}
-                            {topicsById[currentTopicIndex]?.topic}
+                            {topicsById[currentTopicIndex] &&
+                              topicsById[currentTopicIndex].topic}
                           </label>
                           {filteredPractices.map((bestPractice, index) => (
                             <FormGroup key={index} className="mb-2">
@@ -292,7 +293,13 @@ function RRReport() {
                   marginTop: "-16px",
                 }}
               >
-                <CardBody style={{ padding: "0.8rem",display:'flex',justifyContent:'space-between' }}>
+                <CardBody
+                  style={{
+                    padding: "0.8rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div>
                     <Button
                       color="dark"
@@ -314,7 +321,9 @@ function RRReport() {
                     </Button>
                   </div>
                   <div>
-                    <Button color="primary" style={{marginRight:"2rem"}}>Submit</Button>
+                    <Button color="primary" style={{ marginRight: "2rem" }}>
+                      Submit
+                    </Button>
                   </div>
                 </CardBody>
               </Card>

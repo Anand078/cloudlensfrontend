@@ -9,7 +9,6 @@ const initialState = {
     leftSideBarTheme: leftSideBarTheme.LIGHT,
     leftSideBarType: leftSideBarType.DEFAULT,
     topbarTheme: topbarTheme.LIGHT,
-    showRightSidebar: false,
     isMobile: false,
     showSidebar: true,
     leftMenu: false,
@@ -34,9 +33,6 @@ const LayoutReducer =createSlice({
         changeTopbarTheme(state, action){
             state.topbarTheme = action.payload
         },
-        showRightSidebarAction(state, action){
-            state.showRightSidebar = action.payload
-        },
         showSidebar(state, action){
             state.showSidebar = action.payload
         },
@@ -46,6 +42,6 @@ const LayoutReducer =createSlice({
     }
 })
 
-export const {changeLayout, changeLayoutWidth, changeSidebarTheme, changeSidebarType, changeTopbarTheme, showSidebar, toggleLeftmenu, showRightSidebarAction} = LayoutReducer.actions
+export const {changeLayout, changeLayoutWidth, changeSidebarTheme, changeSidebarType, changeTopbarTheme, showSidebar, toggleLeftmenu} = LayoutReducer.actions
 
 export default LayoutReducer
