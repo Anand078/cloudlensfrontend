@@ -4,7 +4,8 @@ import Switch from "react-switch"
 import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
 import TimelineModal from "./TECTimeline"
-
+import CoreSkillBadge from "../../helpers/Badges"
+import SkillSelectModal from "./SkillSelectModal"
 const OffSymbol = () => (
   <div
     style={{
@@ -56,9 +57,10 @@ const TECMember = () => {
   const [itemsPerPage] = useState(10)
   const [initialData, setInitialData] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
+  const [selectedSkills, setSelectedSkills] = useState([])
 
   const [isSaving, setIsSaving] = useState(false)
-
+  const [isSkillSelectModalOpen, setSkillSelectModalOpen] = useState(false)
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -135,6 +137,7 @@ const TECMember = () => {
   useEffect(() => {
     fetchData()
   }, [])
+
   const handleSwitchChange = id => {
     setSwitches(prevSwitches => ({
       ...prevSwitches,
@@ -146,7 +149,7 @@ const TECMember = () => {
         if (item.id === id) {
           return {
             ...item,
-            isavailable: switches[id] ? 0 : 1, // Toggle the value
+            isavailable: switches[id] ? 0 : 1,
             updatedon: new Date(),
           }
         }
@@ -189,6 +192,19 @@ const TECMember = () => {
     })
 
     setData(updatedData)
+  }
+
+  const toggleSkillSelectModal = (id, skills) => {
+    setSelectedTecId(id)
+    setSkillSelectModalOpen(!isSkillSelectModalOpen)
+    if (typeof skills === "string") {
+      const skillArray = skills.split(",").map(skill => skill.trim())
+      setSelectedSkills(skillArray)
+    } else if (typeof skills === "object") {
+      setSelectedSkills(skills.map(skill => skill.skill))
+    } else {
+      setSelectedSkills([])
+    }
   }
 
   const handleMemberChange = (id, event) => {
@@ -242,6 +258,7 @@ const TECMember = () => {
 
   const handleSaveTec = async () => {
     try {
+      debugger;
       setIsSaving(true)
 
       const modifiedData = data.filter(
@@ -258,8 +275,6 @@ const TECMember = () => {
         }
       })
 
-      console.log("mod", modifiedData)
-
       if (modifiedData.length > 0) {
         await saveData(modifiedData)
         fetchData()
@@ -275,6 +290,7 @@ const TECMember = () => {
 
   const saveData = async modifiedData => {
     try {
+      debugger;
       const response = await fetch(baseUrl + "/tecmember", {
         method: "POST",
         mode: "cors",
@@ -299,7 +315,6 @@ const TECMember = () => {
         })
       )
 
-      console.log("mm", tectimelineData)
       const tecResponse = await fetch(baseUrl + "/tectimeline", {
         method: "POST",
         mode: "cors",
@@ -316,10 +331,30 @@ const TECMember = () => {
       if (!tecResponse.ok) {
         throw new Error("Failed to save tec timeline data")
       }
-      console.log("saved successfully")
     } catch (error) {
       console.error("Error saving data:", error)
     }
+  }
+
+  const handleSkillSelectAdd = skills => {
+    console.log(typeof skills)
+
+    const skillsString = JSON.stringify(skills)
+
+    const cleanedSkillsString = skillsString.replace(/["\[\]]/g, "")
+    setData(prevData => {
+      return prevData.map(item => {
+        if (item.id === selectedTecId) {
+          return {
+            ...item,
+            coreskills: cleanedSkillsString,
+          }
+        }
+        return item
+      })
+    })
+
+    toggleSkillSelectModal(cleanedSkillsString)
   }
 
   const handleAddRow = () => {
@@ -364,6 +399,7 @@ const TECMember = () => {
     }
   }, [])
 
+  console.log("abc", selectedSkills)
   return (
     <>
       {isLoading ? (
@@ -469,7 +505,14 @@ const TECMember = () => {
                             item.project
                           )}
                         </td>
-                        <td className="text-left"></td>
+                        <td
+                          className="text-left"
+                          onDoubleClick={() => {
+                            toggleSkillSelectModal(item.id, item.coreskills)
+                          }}
+                        >
+                          <CoreSkillBadge skills={item.coreskills} />
+                        </td>
                         <td
                           className="text-left"
                           style={{ paddingLeft: "22px" }}
@@ -533,6 +576,16 @@ const TECMember = () => {
                   toggle={() => toggleTimlineModal(null)}
                   selectedTecId={selectedTecId}
                   selectedProject={selectedProject}
+                />
+                <SkillSelectModal
+                  isOpen={isSkillSelectModalOpen}
+                  toggle={() =>
+                    toggleSkillSelectModal(selectedTecId, selectedSkills)
+                  }
+                  selectedSkills={selectedSkills}
+                  onChange={setSelectedSkills}
+                  onBlur={() => {}}
+                  onSave={handleSkillSelectAdd}
                 />
               </div>
             </Col>

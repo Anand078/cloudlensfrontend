@@ -214,13 +214,13 @@ const SidebarContent = (props) => {
             <SidebarItem
               props={props}
               icon={"ti-map"}
-              link={"/cap-overview"}
+              link={"/cap/overview"}
               title={"Capabilities"}
             />
             <SidebarItem
               props={props}
               icon={"ti-dashboard"}
-              link={"/acc-overview"}
+              link={"/accelerator/overview"}
               title={"Accelerator"}
             />
             <SidebarItem

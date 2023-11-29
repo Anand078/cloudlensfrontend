@@ -14,13 +14,14 @@ import {
   Button,
   ButtonGroup,
   FormGroup,
-  Label,
   Input,
+  Label,
 } from "reactstrap"
 import "./Components/RROverview.css"
 import { useLocation } from "react-router-dom"
 import classnames from "classnames"
 import { useDispatch } from "react-redux"
+import { current } from "@reduxjs/toolkit"
 
 function RRReport() {
   const baseUrl = process.env.REACT_APP_BASE_URL
@@ -39,10 +40,12 @@ function RRReport() {
   )
 
   const handleResponse = (id, response) => {
-    const updatedResponses = [...selectedResponses]
-    updatedResponses[id] = response
-    setSelectedResponses(updatedResponses)
-    console.log("responseData", selectedResponses)
+    setSelectedResponses(prevResponses => {
+      const updatedResponses = [...prevResponses]
+      updatedResponses[id] = response
+      console.log("responseData", updatedResponses)
+      return updatedResponses
+    })
   }
 
   function toggleTab(tab) {
@@ -57,9 +60,6 @@ function RRReport() {
       const [reviewResp] = await Promise.all([fetch(baseUrl + "/arbreview")])
 
       const reviewData = await reviewResp.json()
-      const first = reviewData.data.filter(item => {
-        return item.pillarid === 1 && item.topicid === 1
-      })
       setArbReview(reviewData.data)
       const uniquePillars = Array.from(
         new Set(reviewData?.data.map(item => item.pillarname))
@@ -77,8 +77,12 @@ function RRReport() {
   }, [])
 
   useEffect(() => {
-    AssignReviewData(activeTab)
-  }, [currentTopicIndex, activeTab])
+    if (arbReview.length === 0) {
+      fetchData()
+    } else {
+      AssignReviewData(activeTab)
+    }
+  }, [currentTopicIndex, activeTab, arbReview])
 
   function AssignReviewData(tabId) {
     const topicsByTabId = arbReview.filter(item => item.pillarid === tabId)
@@ -108,6 +112,16 @@ function RRReport() {
       Math.min(prevIndex + 1, topicsById.length - 1)
     )
   }
+
+  const handleCheckboxChange = event => {
+    const isChecked = event.target.checked
+
+    filteredPractices.forEach(bestPractice => {
+      const response = isChecked ? "NA" : "No"
+      handleResponse(bestPractice.bestpracticeid, response)
+    })
+  }
+
   return (
     <>
       {isLoading ? (
@@ -203,11 +217,32 @@ function RRReport() {
                     <TabPane tabId={activeTab} className="div-height-width">
                       <Form className="div-height-width">
                         <Col sm="12" className="div-height-width">
-                          <label className="form-label">
-                            {currentTopicIndex + 1} {". "}
-                            {topicsById[currentTopicIndex] &&
-                              topicsById[currentTopicIndex].topic}
-                          </label>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div>
+                              <label className="form-label">
+                                {currentTopicIndex + 1} {". "}
+                                {topicsById[currentTopicIndex] &&
+                                  topicsById[currentTopicIndex].topic}
+                              </label>
+                            </div>
+                            <div
+                              className="form-check form-check-inline"
+                              style={{ marginLeft: "1rem" }}
+                            >
+                              <Input
+                                id="exampleCheckbox"
+                                name="checkbox"
+                                type="checkbox"
+                                onChange={handleCheckboxChange}
+                              />
+                              <Label check for="exampleCheckbox">
+                                Not Applicable
+                              </Label>
+                            </div>
+                          </div>
+
                           {filteredPractices.map((bestPractice, index) => (
                             <FormGroup key={index} className="mb-2">
                               <div style={{ display: "flex", gap: "1rem" }}>

@@ -66,9 +66,9 @@ const userRoutes = [
   //Dashboard
   { path: "/dashboard", component: <Dashboard /> },
   //Capabilities
-  { path: "cap-overview", component: <CapOverview /> },
+  { path: "cap/overview", component: <CapOverview /> },
   //Accelerator
-  { path: "acc-overview", component: <AccOverview /> },
+  { path: "accelerator/overview", component: <AccOverview /> },
   //Architecture Review
   { path: "arb/overview", component: <ArbOverview /> },
   //Review Overview
