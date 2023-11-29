@@ -282,7 +282,7 @@ const TECMember = () => {
         console.log("No changes to save.")
       }
     } catch (error) {
-      console.error("Error saving data:", error)
+      console.error("Error saving data :", error)
     } finally {
       setIsSaving(false)
     }
