@@ -1,81 +1,80 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap"
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
+
+import "./TimelineModal.css"; // Import a separate CSS file for styling
 
 const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
-  const baseUrl = process.env.REACT_APP_BASE_URL
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const [apiData, setApiData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const isMounted = useRef(true)
+  const [apiData, setApiData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const isMounted = useRef(true);
 
-  const formatDateTime = dateTimeString => {
+  const formatDateTime = (dateTimeString) => {
     const options = {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }
+    };
     const formattedDate = new Date(dateTimeString).toLocaleString(
       "en-US",
       options
-    )
-    return formattedDate
-  }
+    );
+    return formattedDate;
+  };
 
   useEffect(() => {
-    isMounted.current = true
-    const abortController = new AbortController()
+    isMounted.current = true;
+    const abortController = new AbortController();
 
     const fetchData = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         if (selectedTecId != null) {
-          const response = await fetch(
-            baseUrl + "/tectimeline/" + selectedTecId,
-            {
-              signal: abortController.signal,
-            }
-          )
-          const data = await response.json()
-          console.log("API Response:", data.data)
+          const response = await fetch(baseUrl + "/tectimeline/" + selectedTecId, {
+            signal: abortController.signal,
+          });
+          const data = await response.json();
+          console.log("API Response:", data.data);
           if (isMounted.current) {
-            setApiData(data.data)
+            setApiData(data.data);
           }
         } else {
-          console.warn("selectedTecId is null or undefined. Skipping API call.")
+          console.warn("selectedTecId is null or undefined. Skipping API call.");
         }
       } catch (error) {
         if (error.name === "AbortError") {
-          console.log("Fetch aborted")
+          console.log("Fetch aborted");
         } else {
-          console.error("Error fetching data from the API:", error)
+          console.error("Error fetching data from the API:", error);
         }
       } finally {
         if (isMounted.current) {
-          setLoading(false)
+          setLoading(false);
         }
       }
-    }
+    };
 
-    fetchData()
+    fetchData();
 
     return () => {
-      isMounted.current = false
-      abortController.abort()
-    }
-  }, [selectedTecId, selectedProject])
+      isMounted.current = false;
+      abortController.abort();
+    };
+  }, [selectedTecId, selectedProject]);
 
   useEffect(() => {
     if (!isOpen) {
-      setApiData([])
+      setApiData([]);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered>
       <ModalHeader toggle={toggle}>{selectedProject} - Activity</ModalHeader>
-      <ModalBody>
+      <ModalBody className="custom-scrollbar">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center">
             <Spinner type="grow" className="ms-2" color="success" />
@@ -103,7 +102,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
         )}
       </ModalBody>
     </Modal>
-  )
-}
+  );
+};
 
-export default TimelineModal
+export default TimelineModal;
