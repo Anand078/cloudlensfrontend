@@ -7,7 +7,7 @@ const OverViewCont = id => {
   document.title = "AMS Dashboard | Review Report"
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content custom-scrollbar">
         <Container fluid>
           {/* <Breadcrumb
             maintitle="AMS Dashboard"
@@ -19,7 +19,7 @@ const OverViewCont = id => {
             <Col
               xs="12"
               className="d-flex justify-content-center align-items-center mt-3"
-              style={{ minHeight: "60vh", }}
+              style={{ minHeight: "60vh" }}
             >
               <RRReport />
             </Col>

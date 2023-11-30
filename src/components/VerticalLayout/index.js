@@ -14,7 +14,7 @@ import {
 // Layout Related Components
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 
 class Layout extends Component {
   constructor(props) {
@@ -69,7 +69,7 @@ class Layout extends Component {
             isMobile={this.state.isMobile}
           />
           <div className="main-content">{this.props.children}</div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </React.Fragment>
     );

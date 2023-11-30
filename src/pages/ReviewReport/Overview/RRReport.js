@@ -26,6 +26,8 @@ import { current } from "@reduxjs/toolkit"
 function RRReport() {
   const baseUrl = process.env.REACT_APP_BASE_URL
   const [isLoading, setIsLoading] = useState(true)
+  const [notApplicableChecked, setNotApplicableChecked] = useState(false)
+
   const location = useLocation()
   const rowData = location.state
   const [activeTab, setactiveTab] = useState(1)
@@ -115,12 +117,25 @@ function RRReport() {
 
   const handleCheckboxChange = event => {
     const isChecked = event.target.checked
+    setNotApplicableChecked(true)
 
     filteredPractices.forEach(bestPractice => {
-      const response = isChecked ? "NA" : "No"
+      const response = isChecked ? "NA" : undefined
       handleResponse(bestPractice.bestpracticeid, response)
     })
   }
+  // const handleCheckboxChange = event => {
+  //   const isChecked = event.target.checked;
+
+  //   if (event.target.id === "allAplicable") {
+  //     setNotApplicableChecked(isChecked);
+  //   } else {
+  //     filteredPractices.forEach(bestPractice => {
+  //       const response = isChecked ? "NA" : "No";
+  //       handleResponse(bestPractice.bestpracticeid, response);
+  //     });
+  //   }
+  // };
 
   return (
     <>
@@ -133,18 +148,19 @@ function RRReport() {
         </div>
       ) : (
         <Container fluid>
-          <Row>
-            <Col sm="3">
-              <Row>
+          <div style={{display:'flex',gap:'1.7rem',}} >
+            <Col sm="3"  >
+              <Row >
                 <Card style={{ borderRadius: "1rem" }}>
                   <CardBody
                     style={{
                       display: "flex",
                       flexDirection: "column",
                       gap: "0.2rem",
-                      height: "70vh",
+                      height: "75vh",
                       overflow: "auto",
                     }}
+                    className="custom-scrollbar py-4 px-1"
                   >
                     {tabItems?.map((label, index) => (
                       <NavItem
@@ -169,10 +185,10 @@ function RRReport() {
                   </CardBody>
                 </Card>
               </Row>
-              <Row style={{ marginTop: "-16px" }}>
+              <Row >
                 <Card style={{ borderRadius: "1rem" }}>
                   <CardBody style={{ padding: "0.8rem" }}>
-                    <div className="actions  button-group-between ">
+                    <div className="actions button-group-between">
                       <Button
                         color="primary"
                         className={
@@ -201,22 +217,25 @@ function RRReport() {
                 </Card>
               </Row>
             </Col>
-            <Col sm="9">
+            <Col sm="9"   >
+              <Row>
               <Card style={{ borderRadius: "1rem" }}>
                 <CardBody
                   style={{
-                    height: "70vh",
-                    overflow: "auto",
-                    position: "relative",
+                    height: "75vh",
                   }}
+                  className="custom-scrollbar"
                 >
                   <TabContent
                     activeTab={activeTab}
-                    className="div-height-width"
+                    className="div-height-width "
                   >
                     <TabPane tabId={activeTab} className="div-height-width">
                       <Form className="div-height-width">
-                        <Col sm="12" className="div-height-width">
+                        <Col
+                          sm="12"
+                          className="div-height-width custom-scrollbar"
+                        >
                           <div
                             style={{ display: "flex", alignItems: "center" }}
                           >
@@ -232,19 +251,23 @@ function RRReport() {
                               style={{ marginLeft: "1rem" }}
                             >
                               <Input
-                                id="exampleCheckbox"
+                                id="allAplicable"
                                 name="checkbox"
                                 type="checkbox"
+                                // checked={notApplicableChecked}
                                 onChange={handleCheckboxChange}
                               />
-                              <Label check for="exampleCheckbox">
+                              <Label check for="allAplicable">
                                 Not Applicable
                               </Label>
                             </div>
                           </div>
 
                           {filteredPractices.map((bestPractice, index) => (
-                            <FormGroup key={index} className="mb-2">
+                            <FormGroup
+                              key={index}
+                              className="mb-2 custom-scrollbar"
+                            >
                               <div style={{ display: "flex", gap: "1rem" }}>
                                 <ButtonGroup
                                   className="custom-button-group"
@@ -320,13 +343,10 @@ function RRReport() {
                   </TabContent>
                 </CardBody>
               </Card>
+              </Row>
+              <Row>
               <Card
-                style={{
-                  position: "sticky",
-                  bottom: "0",
-                  borderRadius: "1rem",
-                  marginTop: "-16px",
-                }}
+                
               >
                 <CardBody
                   style={{
@@ -362,8 +382,9 @@ function RRReport() {
                   </div>
                 </CardBody>
               </Card>
+              </Row>
             </Col>
-          </Row>
+          </div>
         </Container>
       )}
     </>

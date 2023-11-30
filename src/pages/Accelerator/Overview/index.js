@@ -7,7 +7,7 @@ const OverViewCont = () => {
   document.title = "AMS Dashboard | Accelerator "
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content custom-scrollbar">
         <Container fluid>
           <Breadcrumb
             maintitle="Dashboard"

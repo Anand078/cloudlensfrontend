@@ -1,28 +1,24 @@
-import PropTypes from 'prop-types';
-import React from "react";
-import { Routes, Route } from 'react-router-dom';
-import { connect } from "react-redux";
+import PropTypes from "prop-types"
+import React from "react"
+import { Routes, Route } from "react-router-dom"
+import { connect } from "react-redux"
 
-import { userRoutes } from "./routes/allRoutes";
+import { userRoutes } from "./routes/allRoutes"
 
-import Authmiddleware from "./routes/middleware/Authmiddleware";
+import Authmiddleware from "./routes/middleware/Authmiddleware"
 
-
-import "./assets/scss/theme.scss";
-
+import "./index.css"
+import "./assets/scss/theme.scss"
 
 const App = () => {
   return (
-    <React.Fragment>
+    <React.Fragment >
       <Routes>
         <Route>
           {userRoutes.map((route, idx) => (
             <Route
               path={route.path}
-              element={
-                <Authmiddleware>
-                  {route.component}
-                </Authmiddleware>}
+              element={<Authmiddleware>{route.component}</Authmiddleware>}
               key={idx}
               exact={true}
             />
@@ -30,17 +26,17 @@ const App = () => {
         </Route>
       </Routes>
     </React.Fragment>
-  );
-};
+  )
+}
 
 App.propTypes = {
-  layout: PropTypes.any
-};
+  layout: PropTypes.any,
+}
 
 const mapStateToProps = state => {
   return {
     layout: state.Layout,
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, null)(App)

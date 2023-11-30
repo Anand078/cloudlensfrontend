@@ -47,7 +47,7 @@ const Dashboard = (props) => {
   document.title = "Team AMS | Dashboard";
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content custom-scrollbar">
         <Container fluid>
           <div className="page-title-box">
             <Row className="align-items-center">

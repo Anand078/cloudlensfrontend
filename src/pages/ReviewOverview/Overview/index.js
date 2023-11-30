@@ -1,13 +1,13 @@
 import React from "react"
 import { Container, Row, Col } from "reactstrap"
 import Breadcrumb from "components/Common/Breadcrumb"
-import AccountOverview from "./RROverview"
+import RROverview from "./RROverview"
 
-const OverViewCont = (id) => {
+const OverViewCont = id => {
   document.title = "AMS Dashboard | Review Report"
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content custom-scrollbar">
         <Container fluid>
           <Breadcrumb
             maintitle="AMS Dashboard"
@@ -21,7 +21,7 @@ const OverViewCont = (id) => {
               className="d-flex justify-content-center align-items-center"
               style={{ minHeight: "60vh" }}
             >
-              <AccountOverview />
+              <RROverview />
             </Col>
           </Row>
         </Container>

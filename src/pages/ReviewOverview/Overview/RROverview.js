@@ -40,28 +40,44 @@ function RROverview() {
       ) : (
         <Container fluid>
           <Row>
+          </Row>
+          <Row>
             <Col lg={12}>
               <Card>
-                <CardBody className="d-flex button-items">
-                  <div className="flex-grow-1"> </div>
-                  <Button
-                    color="primary"
-                    className="btn btn-primary waves-effect waves-light"
-                    onClick={() => handleReviewPage(rowData)}
-                  >
-                    Review
-                  </Button>{" "}
-                  {/* <Button
-                    color="success"
-                    className="btn btn-primary waves-effect waves-light"
-                  >
-                    Plan
-                  </Button>{" "} */}
+                <CardBody>
+                  <CardTitle className="h4 mb-4">
+                    Project Review Summary
+                  </CardTitle>
+                  <div className="d-flex justify-content-between">
+                    <div style={{ flex: "0 0 60%" }}>
+                      <p style={{ color: "#333333" }}>
+                        Project resources are provisioned in Nagarro's purview
+                        as of now. These resources will be migrated to the
+                        client's account at a later stage, subject to customer
+                        agreement. Hence some of the implementation items can be
+                        carried forward for later.
+                      </p>
+                      <p style={{ color: "#333333" }}>
+                        The project has recently completed the implementation
+                        phase, and this review will help them establish that the
+                        practices followed during the implementation hold good
+                        for the platform architecture.
+                      </p>
+                    </div>
+                    <div className="ml-auto">
+                      <Button
+                        color="primary"
+                        className="btn btn-primary waves-effect waves-light"
+                        onClick={() => handleReviewPage(rowData)}
+                      >
+                        Review
+                      </Button>
+                    </div>
+                  </div>
                 </CardBody>
               </Card>
             </Col>
           </Row>
-
           <Row>
             <Col lg={3}>
               <Card>
@@ -161,36 +177,6 @@ function RROverview() {
                     Count of Review by Pillar and Approved
                   </CardTitle>
                   <ReviewChart />
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={12}>
-              <Card>
-                <CardBody>
-                  <CardTitle className="h4 mb-4">
-                    Project Review Summary
-                  </CardTitle>
-                  <div className="d-flex">
-                    <div style={{ flex: "0 0 60%" }}>
-                      <p style={{ color: "#333333" }}>
-                        Project resources are provisioned in Nagarro's purview
-                        as of now. These resources will be migrated to the
-                        client's account at a later stage, subject to customer
-                        agreement. Hence some of the implementation items can be
-                        carried forward for later.
-                      </p>
-                      <p style={{ color: "#333333" }}>
-                        The project has recently completed the implementation
-                        phase and this review will help them establish that the
-                        practices followed during the implementation hold good
-                        for the platform architecture
-                      </p>
-                    </div>
-                    <div className="flex-grow-1">2</div>
-                  </div>
                 </CardBody>
               </Card>
             </Col>

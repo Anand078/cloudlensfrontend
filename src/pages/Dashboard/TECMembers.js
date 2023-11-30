@@ -335,7 +335,6 @@ const TECMember = () => {
       console.error("Error saving data:", error)
     }
   }
-
   const handleSkillSelectAdd = skills => {
     console.log(typeof skills)
 
