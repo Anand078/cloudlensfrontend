@@ -1,20 +1,14 @@
 import React from "react"
 import { Container, Row, Col } from "reactstrap"
-import Breadcrumb from "components/Common/Breadcrumb"
+
 import RROverview from "./RROverview"
 
-const OverViewCont = id => {
+const RROverviewIndex = id => {
   document.title = "AMS Dashboard | Review Report"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">
         <Container fluid>
-          <Breadcrumb
-            maintitle="AMS Dashboard"
-            title="Architecture Review"
-            breadcrumbItem="Review Overview"
-            path="/arb/overview"
-          />
           <Row>
             <Col
               xs="12"
@@ -30,4 +24,4 @@ const OverViewCont = id => {
   )
 }
 
-export default OverViewCont
+export default RROverviewIndex

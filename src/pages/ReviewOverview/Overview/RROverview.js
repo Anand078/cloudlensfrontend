@@ -8,6 +8,7 @@ import {
   CardTitle,
   Spinner,
   Button,
+  Badge,
 } from "reactstrap"
 import "./Components/RROverview.css"
 import { useNavigate } from "react-router-dom"
@@ -27,7 +28,14 @@ function RROverview() {
   const handleReviewPage = row => {
     navigate(`/arb/${row.projectname}/review`, { state: row })
   }
-
+  const data = [
+    { id: 1, pillar: "Cost Optimization", text: "PENDING" },
+    { id: 2, pillar: "Security", text: "PENDING" },
+    { id: 3, pillar: "Operational Excellence", text: "PENDING" },
+    { id: 4, pillar: "Reliability", text: "PENDING" },
+    { id: 5, pillar: "Sustainability", text: "PENDING" },
+    { id: 6, pillar: "Performance Efficiency", text: "PENDING" },
+  ]
   return (
     <>
       {false ? (
@@ -39,7 +47,83 @@ function RROverview() {
         </div>
       ) : (
         <Container fluid>
-          <Row>
+          <Row
+            className="col-12"
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "0.05rem",
+              padding: "0",
+              margin: "0 auto",
+            }}
+          >
+            <div
+              className=" d-flex py-2 m-0 "
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "0.4rem",
+              }}
+            >
+              {data.map(item => {
+                return (
+                  <div
+                    key={item.id}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "0.3rem",
+                      padding: 0,
+                      margin: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "90px",
+                        height: "100px",
+                        borderRadius: "10px",
+                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                      }}
+                      className="p-1 m-0 bg-white"
+                    >
+                      <div className="d-flex flex-column align-items-center justify-content-center">
+                        <p>{item.id}</p>
+                        <span
+                          style={{
+                            fontSize: "9px",
+                            fontWeight: "700",
+                            alignSelf: "center",
+                            display:'flex',
+                            justifyContent:'center',
+                            alignItems:'center'
+                          }}
+                        >
+                          {item.pillar}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: "68px",
+                        height: "20px",
+                        borderRadius: "15px",
+                        background: "grey",
+                        textAlign: "center",
+                        alignSelf: "center",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        fontSize: "10px",
+                        color: "#fff",
+                      }}
+                    >
+                      {item.text}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </Row>
           <Row>
             <Col lg={12}>
