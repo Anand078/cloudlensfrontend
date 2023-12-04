@@ -3,6 +3,8 @@ import { Bar } from "react-chartjs-2"
 import "chartjs-plugin-datalabels"
 
 const BarChart = () => {
+  const dataValues = [5, 7, 3, 2, 6, 4]
+  const total = dataValues.reduce((acc, value) => acc + value, 0)
   const data = {
     labels: [
       "Cost Optimization",
@@ -34,14 +36,8 @@ const BarChart = () => {
         anchor: "end",
         font: { size: "15" },
         formatter: (value, context) => {
-          const dataset = context.dataset
-          const meta = dataset._meta[Object.keys(dataset._meta)[0]]
-          const total = meta.total
-          const currentValue = value
-          const percentage = parseFloat(
-            ((currentValue / total) * 100).toFixed(1)
-          )
-          return currentValue + "%"
+         
+          return value
         },
       },
     },
@@ -49,8 +45,6 @@ const BarChart = () => {
       callbacks: {
         label: (tooltipItem, data) => {
           const dataset = data.datasets[tooltipItem.datasetIndex]
-          const meta = dataset._meta[Object.keys(dataset._meta)[0]]
-          const total = meta.total
           const currentValue = dataset.data[tooltipItem.index]
           const percentage = parseFloat(
             ((currentValue / total) * 100).toFixed(1)
