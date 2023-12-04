@@ -1,20 +1,20 @@
 import React from "react"
 import ReactApexChart from "react-apexcharts"
 
-const ApexChart = () => {
+const ResponseBreakDown = () => {
   const state = {
     series: [
       {
         name: "Compliant",
-        data: [44, 55, 41, 37, 22, 43, 21],
+        data: [44, 55, 41, 37, 22, 43],
       },
       {
         name: "Non Compliant",
-        data: [53, 32, 33, 52, 13, 43, 32],
+        data: [53, 32, 33, 52, 13, 43],
       },
       {
         name: "Not Applicable",
-        data: [12, 17, 11, 9, 15, 11, 20],
+        data: [12, 17, 11, 9, 15, 11],
       },
     ],
     options: {
@@ -27,20 +27,15 @@ const ApexChart = () => {
       plotOptions: {
         bar: {
           horizontal: true,
-          dataLabels: {
-            position: "center",
-            style: {
-              colors: ["#fff"],
-            },
-          },
+          barHeight: "25%",
         },
       },
-      stroke: {
-        width: 1,
-        colors: ["#fff"],
-      },
-      title: {
-        text: "100% Stacked Bar",
+      dataLabels: {
+        enabled: true,
+        style: {
+          colors: ["#ffffff", "#ffffff", "#ffffff"],
+        },
+        offsetY: -15,
       },
       xaxis: {
         categories: [
@@ -55,7 +50,7 @@ const ApexChart = () => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return val + "%"
+            return val
           },
         },
       },
@@ -64,10 +59,10 @@ const ApexChart = () => {
       },
       legend: {
         position: "top",
-        horizontalAlign: "left",
-        offsetX: 40,
+        horizontalAlign: "center",
+        offsetX: 100,
       },
-      colors: ["#02a499", "#bf300f", "#8c8482"],
+      colors: ["#E34F68", "#00E895", "#e3e0e0"],
     },
   }
 
@@ -83,4 +78,4 @@ const ApexChart = () => {
   )
 }
 
-export default ApexChart
+export default ResponseBreakDown

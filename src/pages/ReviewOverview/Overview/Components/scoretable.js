@@ -79,7 +79,7 @@ const ScoreTable = () => {
       <Table className="table mb-0">
         <thead className="table-light">
           <tr>
-            <th>Scope</th>
+            <th>Pillar</th>
             <th>Topics</th>
             <th>Best Practices</th>
             <th>Compliant</th>

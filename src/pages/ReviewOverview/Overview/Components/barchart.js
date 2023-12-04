@@ -15,11 +15,11 @@ const BarChart = () => {
     datasets: [
       {
         label: "",
-        backgroundColor: "#02a499",
-        borderColor: "#02a499",
+        backgroundColor: "#626ed4",
+        borderColor: "#626ed4",
         borderWidth: 1,
-        hoverBackgroundColor: "#02a499",
-        hoverBorderColor: "#02a499",
+        hoverBackgroundColor: "#626ed4",
+        hoverBorderColor: "#626ed4",
         data: [5, 7, 3, 2, 6, 4],
       },
     ],
@@ -63,6 +63,12 @@ const BarChart = () => {
       },
     },
     scales: {
+      xAxes: [
+        {
+          barPercentage: 0.6,
+          categoryPercentage: 0.7,
+        },
+      ],
       yAxes: [
         {
           ticks: {
@@ -76,7 +82,7 @@ const BarChart = () => {
 
   return (
     <React.Fragment>
-      <Bar width={600} height={400} data={data} options={options} />
+      <Bar width={700} height={400} data={data} options={options} />
     </React.Fragment>
   )
 }

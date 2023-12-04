@@ -17,6 +17,8 @@ import { useLocation } from "react-router-dom"
 import BarChart from "./Components/barchart"
 import StackedChart from "./Components/stackedchart"
 import ScoreTable from "./Components/scoretable"
+import ARBDetails from "./Components/teammembers"
+import ProjectDetails from "./Components/projectmembers"
 function RROverview() {
   const [isLoading, setIsLoading] = useState(true)
   const location = useLocation()
@@ -44,8 +46,8 @@ function RROverview() {
           <Spinner type="grow" className="ms-2" color="info" />
         </div>
       ) : (
-        <Container fluid>
-          <Row
+        <Container fluid style={{marginTop:"30px"}}>
+          {/* <Row
             className="col-12"
             style={{
               display: "flex",
@@ -122,18 +124,7 @@ function RROverview() {
                 )
               })}
             </div>
-          </Row>
-          <Row>
-            <Col lg={12}>
-              <Card>
-                <CardBody>
-                  <Progress className="my-2" value="49">
-                    49%
-                  </Progress>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col lg={12}>
               <Card>
@@ -142,7 +133,7 @@ function RROverview() {
                     Project Review Summary
                   </CardTitle>
                   <div className="d-flex justify-content-between">
-                    <div style={{ flex: "0 0 60%" }}>
+                    <div style={{ flex: "0 0 50%" }}>
                       <p style={{ color: "#333333" }}>
                         Project resources are provisioned in Nagarro's purview
                         as of now. These resources will be migrated to the
@@ -162,6 +153,7 @@ function RROverview() {
                         color="primary"
                         className="btn btn-primary waves-effect waves-light"
                         onClick={() => handleReviewPage(rowData)}
+                        style={{ marginTop: "-75px" }}
                       >
                         Review
                       </Button>
@@ -171,12 +163,32 @@ function RROverview() {
               </Card>
             </Col>
           </Row>
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle className="h4 mb-4">Project Score</CardTitle>
+                  <Progress
+                    className="my-2"
+                    value="49"
+                    style={{
+                      height: "30px",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                    }}
+                  >
+                    49%
+                  </Progress>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
           <Row className="d-flex">
             <Col lg={7} className="d-flex align-items-stretch">
               <Card className="w-100">
                 <div className="generic-bar"></div>
                 <CardBody>
-                  <h5 className="mt-0 header-title mb-2">Score per Scope</h5>
+                  <h5 className="mt-0 header-title mb-2">Score per Pillar</h5>
                   <div className="mb-0">
                     <BarChart />
                   </div>
@@ -200,6 +212,7 @@ function RROverview() {
             <Col lg={12}>
               <Card>
                 <CardBody>
+                  <CardTitle className="h4 mb-4">Response Breakdown</CardTitle>
                   <StackedChart />
                 </CardBody>
               </Card>
@@ -214,6 +227,24 @@ function RROverview() {
               </Card>
             </Col>
           </Row>
+
+          <Row>
+            <Col lg={6}>
+              <Card>
+                <CardBody>
+                  <ARBDetails />
+                </CardBody>
+              </Card>
+            </Col>
+            <Col lg={6}>
+              <Card>
+                <CardBody>
+                  <ProjectDetails />
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+
           <Row>
             <Col lg={12}>
               <Card>
