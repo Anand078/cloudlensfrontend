@@ -15,6 +15,7 @@ import {
 import ArcModal from "./Components/ArcModal"
 import Pie from "./Components/piechart"
 import BarChart from "pages/AllCharts/chartjs/barchart"
+
 import { useDispatch } from "react-redux"
 import { MDBDataTable } from "mdbreact"
 import DeleteConfirmationModal from "./Components/DeleteArc"

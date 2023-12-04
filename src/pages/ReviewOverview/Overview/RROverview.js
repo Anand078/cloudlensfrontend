@@ -8,18 +8,16 @@ import {
   CardTitle,
   Spinner,
   Button,
-  Badge,
+  Progress,
 } from "reactstrap"
 import "./Components/RROverview.css"
 import { useNavigate } from "react-router-dom"
-import Rating from "react-rating"
-import CountOfChoice from "./Components/piechart"
-import Bar from "./Components/ChoicePillarChart"
-import ReviewChart from "./Components/ReviewPillarChart"
+import Pie from "./Components/piechart"
 import { useLocation } from "react-router-dom"
-import CountUp from "react-countup"
+import BarChart from "./Components/barchart"
+import StackedChart from "./Components/stackedchart"
+import ScoreTable from "./Components/scoretable"
 function RROverview() {
-  const starStyle = {}
   const [isLoading, setIsLoading] = useState(true)
   const location = useLocation()
   const rowData = location.state
@@ -91,12 +89,12 @@ function RROverview() {
                         <p>{item.id}</p>
                         <span
                           style={{
-                            fontSize: "9px",
-                            fontWeight: "700",
+                            fontSize: "10px",
+                            fontWeight: "500",
                             alignSelf: "center",
-                            display:'flex',
-                            justifyContent:'center',
-                            alignItems:'center'
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                           }}
                         >
                           {item.pillar}
@@ -124,6 +122,17 @@ function RROverview() {
                 )
               })}
             </div>
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <Progress className="my-2" value="49">
+                    49%
+                  </Progress>
+                </CardBody>
+              </Card>
+            </Col>
           </Row>
           <Row>
             <Col lg={12}>
@@ -162,105 +171,94 @@ function RROverview() {
               </Card>
             </Col>
           </Row>
-          <Row>
-            <Col lg={3}>
-              <Card>
+          <Row className="d-flex">
+            <Col lg={7} className="d-flex align-items-stretch">
+              <Card className="w-100">
                 <div className="generic-bar"></div>
                 <CardBody>
-                  <h5 className="mt-0 header-title mb-2">
-                    {rowData?.projectname}
-                  </h5>
-                  <div className="mb-0">Review Report</div>
+                  <h5 className="mt-0 header-title mb-2">Score per Scope</h5>
+                  <div className="mb-0">
+                    <BarChart />
+                  </div>
                 </CardBody>
               </Card>
             </Col>
-            <Col lg={3}>
-              <Card>
-                <div className="pillar-bar"></div>
+            <Col lg={5} className="d-flex align-items-stretch">
+              <Card className="w-100">
                 <CardBody>
                   <h5 className="mt-0 header-title mb-2">
-                    <CountUp delay={0.3} end={6} duration={0.7} />
+                    Scope of Improvement
                   </h5>
-                  <div className="mb-0">Count of Pillar</div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col lg={3}>
-              <Card>
-                <div className="topic-bar"></div>
-                <CardBody>
-                  <h5 className="mt-0 header-title mb-2">
-                    <CountUp delay={0.3} end={60} duration={0.7} />
-                  </h5>
-                  <div className="mb-0">Count of Topic</div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col lg={3}>
-              <Card>
-                <div className="choice-bar"></div>
-                <CardBody>
-                  <h5 className="mt-0 header-title mb-2">
-                    <CountUp delay={0.3} end={394} duration={0.7} />
-                  </h5>
-                  <div className="mb-0">Count of Best Practices</div>
+                  <div className="mb-0">
+                    <Pie />
+                  </div>
                 </CardBody>
               </Card>
             </Col>
           </Row>
           <Row>
-            <Col lg={3} className="d-flex">
-              <Row>
-                <Card className="w-100">
-                  <CardBody>
-                    <CardTitle className="h4 mb-4">
-                      Count of Choice by Compliant
-                    </CardTitle>
-                    <CountOfChoice className="w-100" />
-                  </CardBody>
-                </Card>
-                <Card>
-                  <CardBody>
-                    <CardTitle className="h4 mb-4">Project Rating</CardTitle>
-                    <Rating
-                      ActiveComponent={
-                        <i
-                          key={"active_3"}
-                          className="mdi mdi-star text-primary"
-                          style={starStyle}
-                        />
-                      }
-                      InActiveComponent={
-                        <i
-                          key={"active_03"}
-                          className="mdi mdi-star-outline text-muted"
-                          style={starStyle}
-                        />
-                      }
-                      readonly={true}
-                      initialRating={3}
-                    />
-                  </CardBody>
-                </Card>
-              </Row>
-            </Col>
-            <Col lg={4} className="d-flex">
-              <Card className="w-100">
+            <Col lg={12}>
+              <Card>
                 <CardBody>
-                  <CardTitle className="h4 mb-4">
-                    Count of Choice by Pillar
-                  </CardTitle>
-                  <Bar className="w-100" />
+                  <StackedChart />
                 </CardBody>
               </Card>
             </Col>
-            <Col lg={5} className="d-flex">
-              <Card className="w-100">
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <Card>
                 <CardBody>
-                  <CardTitle className="h4 mb-4">
-                    Count of Review by Pillar and Approved
-                  </CardTitle>
-                  <ReviewChart />
+                  <ScoreTable />
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle className="h4 mb-4">Goals</CardTitle>
+                  <div style={{ color: "#333333", padding: "0 30px" }}>
+                    <ol>
+                      <li>
+                        <p>
+                          To ensure the best security posture during the
+                          governance
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          To ensure resilience patterns are followed in the
+                          technical landscape
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          Look for further cost optimization scope in the
+                          project.
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle className="h4 mb-4">Caveats</CardTitle>
+                  <div style={{ color: "#333333", padding: "0 50px" }}>
+                    <p>
+                      Project resources are provisioned in Nagarro's purview as
+                      of now. These resources will be migrated to the client's
+                      account at a later stage, subject to customer agreement.
+                      Hence some of the implementation items can be carried
+                      forward for later. There are no known technical caveats.
+                    </p>
+                  </div>
                 </CardBody>
               </Card>
             </Col>
