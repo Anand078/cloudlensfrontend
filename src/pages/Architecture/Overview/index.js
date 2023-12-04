@@ -1,7 +1,7 @@
 import React from "react"
 import { Container, Row, Col } from "reactstrap"
 import Breadcrumb from "components/Common/Breadcrumb"
-import AccountOverview from "./ArcOverview"
+import ArbOverview from "./ArbOverview"
 
 const OverViewCont = () => {
   document.title = "AMS Dashboard | Architecture Review Board"
@@ -21,7 +21,7 @@ const OverViewCont = () => {
               className="d-flex justify-content-center align-items-center"
               style={{ minHeight: "60vh" }}
             >
-              <AccountOverview />
+              <ArbOverview />
             </Col>
           </Row>
         </Container>

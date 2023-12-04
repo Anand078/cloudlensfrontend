@@ -14,7 +14,7 @@ import {
 
 import ArcModal from "./Components/ArcModal"
 import Pie from "./Components/piechart"
-import BarChart from "pages/AllCharts/chartjs/barchart"
+import BarChart from "./Components/BarChart"
 
 import { useDispatch } from "react-redux"
 import { MDBDataTable } from "mdbreact"
@@ -142,9 +142,20 @@ function AccountOverview() {
   }
 
   const getProjectNameCell = rowData => (
-    <Button onClick={() => handleNavigate(rowData)}>
+    <a
+      style={{
+        fontWeight: "500",
+        color: "black",
+        transition: "color 0.3s ease",
+        textDecoration: "none",
+        cursor: "pointer",
+      }}
+      onClick={() => handleNavigate(rowData)}
+      onMouseOver={e => (e.target.style.color = "blue")}
+      onMouseOut={e => (e.target.style.color = "black")}
+    >
       {rowData.projectname}
-    </Button>
+    </a>
   )
 
   const getEditCell = rowData => (
