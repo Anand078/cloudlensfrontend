@@ -18,3 +18,7 @@
     background-color: #f1f1f1;
   }
   
+
+.multi-line-comments {
+  white-space: pre-line;
+}

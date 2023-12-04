@@ -496,6 +496,7 @@ const AccSnap = () => {
                           )}
                         </td>
                         <td
+                          style={{ whiteSpace: "pre-line" }}
                           onDoubleClick={() =>
                             handleEditToggle("comments", item.id)
                           }
@@ -536,7 +537,6 @@ const AccSnap = () => {
                 <ActivityModal
                   isOpen={isActivityModalOpen}
                   toggle={() => toggleActivityModal(null)}
-                  activityData={activityData}
                   selectedAcceleratorId={selectedAcceleratorId}
                   selectedAccelerator={selectedAccName}
                 />

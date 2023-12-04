@@ -79,7 +79,6 @@ const AccActivityModal = ({
     }
   }, [isOpen]);
 
-  console.log("Data", apiData);
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered>
       <ModalHeader toggle={toggle}>
