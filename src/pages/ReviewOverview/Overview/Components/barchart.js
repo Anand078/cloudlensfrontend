@@ -22,7 +22,7 @@ const BarChart = () => {
         borderWidth: 1,
         hoverBackgroundColor: "#626ed4",
         hoverBorderColor: "#626ed4",
-        data: [5, 7, 3, 2, 6, 4],
+        data: [51, 72, 35, 21, 69, 40],
       },
     ],
   }
@@ -68,6 +68,7 @@ const BarChart = () => {
           ticks: {
             beginAtZero: true,
             min: 0,
+            max: 100,
           },
         },
       ],

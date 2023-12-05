@@ -79,17 +79,17 @@ const Dashboard = (props) => {
                       </DropdownItem>
                       <DropdownItem
                         tag="a"
-                        href="https://www.google.co.in"
+                        href="https://one.nagarro.com"
                         target="_blank"
                       >
-                        Google
+                        Attendance
                       </DropdownItem>
-                      <DropdownItem tag="a" href="#">
-                        Something else here
+                      <DropdownItem tag="a" href="https://leavemanager.nagarro.com/">
+                        Leave Manager
                       </DropdownItem>
                       <DropdownItem divider />
-                      <DropdownItem tag="a" href="#">
-                        Separated link
+                      <DropdownItem tag="a" href="https://nagarro.sharepoint.com/sites/flexi-seat/SitePages/Homepage.aspx#/">
+                        Flexi Seat
                       </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>

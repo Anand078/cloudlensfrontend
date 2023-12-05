@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2"
 import "chartjs-plugin-datalabels"
 
 const BarChart = () => {
-  const dataValues = [5, 7, 3, 2, 6, 4]
+  const dataValues = [51, 72, 39, 24, 65, 47]
   const total = dataValues.reduce((acc, value) => acc + value, 0)
 
   const data = {
@@ -68,6 +68,7 @@ const BarChart = () => {
           ticks: {
             beginAtZero: true,
             min: 0,
+            max: 100,
           },
         },
       ],

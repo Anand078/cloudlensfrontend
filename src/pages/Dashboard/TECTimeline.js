@@ -104,6 +104,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
                   src={emptyData}
                   style={{ height: "335px" }}
                   alt="Empty Data"
+                  loading="lazy"
                 />
               </span>
             )}

@@ -79,8 +79,8 @@ const CoreSkillMaster = ({ isOpen, toggle }) => {
 
   useEffect(() => {
     if (isOpen && skillData.length === 0) {
-        fetchData();
-      }
+      fetchData()
+    }
   }, [isOpen])
 
   const generateNegativeNumber = () => {
