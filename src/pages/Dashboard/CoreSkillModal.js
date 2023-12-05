@@ -59,7 +59,6 @@ const CoreSkillMaster = ({ isOpen, toggle }) => {
   }
 
   const fetchData = async () => {
-    debugger
     try {
       setLoading(true)
 
@@ -75,7 +74,6 @@ const CoreSkillMaster = ({ isOpen, toggle }) => {
   }
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem)
   useEffect(() => {
-    debugger
     fetchData()
   }, [])
 
@@ -138,7 +136,6 @@ const CoreSkillMaster = ({ isOpen, toggle }) => {
     setSkillData(updatedData)
   }
   const handleSaveCoreSkills = async () => {
-    debugger
     try {
       setIsSaving(true)
 
@@ -165,7 +162,6 @@ const CoreSkillMaster = ({ isOpen, toggle }) => {
 
   const saveData = async modifiedData => {
     try {
-      debugger
       const response = await fetch(baseUrl + "/skills", {
         method: "POST",
         mode: "cors",

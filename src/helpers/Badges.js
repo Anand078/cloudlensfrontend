@@ -4,7 +4,6 @@ import { Badge } from "reactstrap"
 const classNames = ["primary", "success", "info", "warning", "danger", "dark"]
 
 const CoreSkillBadge = ({ skills }) => {
-  console.log("skskk", skills)
   const getRandomColor = usedColors => {
     const availableColors = classNames.filter(
       color => !usedColors.includes(color)
