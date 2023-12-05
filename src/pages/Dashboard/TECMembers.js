@@ -256,9 +256,16 @@ const TECMember = () => {
     inputRefs.current[id] = ref
   }
 
+  const handleReloadClick = async () => {
+    setIsLoading(true)
+    try {
+      await fetchData()
+    } finally {
+      setIsLoading(false)
+    }
+  }
   const handleSaveTec = async () => {
     try {
-      debugger;
       setIsSaving(true)
 
       const modifiedData = data.filter(
@@ -290,7 +297,7 @@ const TECMember = () => {
 
   const saveData = async modifiedData => {
     try {
-      debugger;
+      debugger
       const response = await fetch(baseUrl + "/tecmember", {
         method: "POST",
         mode: "cors",
@@ -443,6 +450,9 @@ const TECMember = () => {
                 ) : (
                   <i className="ion ion-md-save"></i>
                 )}
+              </Button>
+              <Button color="primary">
+                <i className="mdi mdi-reload" onClick={handleReloadClick}></i>
               </Button>
             </Col>
           </Row>
