@@ -6,6 +6,7 @@ import isEqual from "lodash/isEqual"
 import TimelineModal from "./TECTimeline"
 import CoreSkillBadge from "../../helpers/Badges"
 import SkillSelectModal from "./SkillSelectModal"
+import CoreSkillMaster from "./CoreSkillModal"
 const OffSymbol = () => (
   <div
     style={{
@@ -84,6 +85,7 @@ const TECMember = () => {
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem)
 
   const [isTimelineModalOpen, setTimelineModalOpen] = useState(false)
+  const [isCoreSkillModalOpen, setCoreSkillModalOpen] = useState(false)
 
   const [selectedProject, setSelectedProject] = useState(null)
   const [selectedTecId, setSelectedTecId] = useState(null)
@@ -91,6 +93,10 @@ const TECMember = () => {
     setTimelineModalOpen(!isTimelineModalOpen)
     setSelectedProject(project)
     setSelectedTecId(id)
+  }
+
+  const toggleCoreSkillModal = () => {
+    setCoreSkillModalOpen(!isCoreSkillModalOpen)
   }
 
   const handlePageChange = pageNumber => {
@@ -405,7 +411,6 @@ const TECMember = () => {
     }
   }, [])
 
-  console.log("abc", selectedSkills)
   return (
     <>
       {isLoading ? (
@@ -451,8 +456,11 @@ const TECMember = () => {
                   <i className="ion ion-md-save"></i>
                 )}
               </Button>
-              <Button color="primary">
-                <i className="mdi mdi-reload" onClick={handleReloadClick}></i>
+              <Button color="primary" onClick={() => toggleCoreSkillModal()}>
+                <i className="mdi mdi-asterisk"></i>
+              </Button>
+              <Button color="primary" onClick={handleReloadClick}>
+                <i className="mdi mdi-reload"></i>
               </Button>
             </Col>
           </Row>
@@ -586,6 +594,11 @@ const TECMember = () => {
                   selectedTecId={selectedTecId}
                   selectedProject={selectedProject}
                 />
+                <CoreSkillMaster
+                  isOpen={isCoreSkillModalOpen}
+                  toggle={() => toggleCoreSkillModal(null)}
+                />
+
                 <SkillSelectModal
                   isOpen={isSkillSelectModalOpen}
                   toggle={() =>
