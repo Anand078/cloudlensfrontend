@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap"
 
-import "./TimelineModal.css" // Import a separate CSS file for styling
-
+import "./TimelineModal.css"
+import emptyData from "../../assets/images/emptydata.svg"
 const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL
 
@@ -77,7 +77,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered>
       <ModalHeader toggle={toggle}>{selectedProject} - Activity</ModalHeader>
-      <ModalBody className="timeline-scrollbar">
+      <ModalBody className="timeline-scrollbar d-flex align-items-center justify-content-center">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center">
             <Spinner type="grow" className="ms-2" color="success" />
@@ -99,7 +99,13 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
                 </li>
               ))
             ) : (
-              <p>No data available</p>
+              <span className="logo-sm">
+                <img
+                  src={emptyData}
+                  style={{ height: "335px" }}
+                  alt="Empty Data"
+                />
+              </span>
             )}
           </ol>
         )}

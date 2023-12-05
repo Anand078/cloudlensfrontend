@@ -44,7 +44,6 @@ const FormValidations = () => {
   })
 
   const handleSave = async () => {
-    debugger
     try {
       const { id, description } = validation.values // Get data from the formik validation
       const parsedId = parseInt(id, 10)

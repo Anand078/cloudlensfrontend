@@ -303,7 +303,6 @@ const TECMember = () => {
 
   const saveData = async modifiedData => {
     try {
-      debugger
       const response = await fetch(baseUrl + "/tecmember", {
         method: "POST",
         mode: "cors",
