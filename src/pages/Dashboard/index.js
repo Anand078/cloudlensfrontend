@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
-import React, { useState } from "react";
+import PropTypes from "prop-types"
+import React, { useState } from "react"
 import {
   Container,
   Row,
@@ -12,39 +12,33 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
-} from "reactstrap";
-import { Link } from "react-router-dom";
-import TEC from "./TECMembers";
+} from "reactstrap"
+import { Link } from "react-router-dom"
+import TEC from "./TECMembers"
+
 // Custom Scrollbar
-import SimpleBar from "simplebar-react";
-import CountUp from "react-countup";
+import SimpleBar from "simplebar-react"
+import CountUp from "react-countup"
 // import images
-import user2 from "../../assets/images/users/user-2.jpg";
-import user3 from "../../assets/images/users/user-3.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import user5 from "../../assets/images/users/user-5.jpg";
-import user6 from "../../assets/images/users/user-6.jpg";
-import smimg1 from "../../assets/images/small/img-1.jpg";
-import smimg2 from "../../assets/images/small/img-2.jpg";
-
+import user2 from "../../assets/images/users/user-2.jpg"
+import user3 from "../../assets/images/users/user-3.jpg"
+import user4 from "../../assets/images/users/user-4.jpg"
+import user5 from "../../assets/images/users/user-5.jpg"
+import user6 from "../../assets/images/users/user-6.jpg"
+import smimg1 from "../../assets/images/small/img-1.jpg"
+import smimg2 from "../../assets/images/small/img-2.jpg"
 // Charts
-import LineAreaChart from "../AllCharts/apex/lineareachart";
-import RadialChart from "../AllCharts/apex/apexdonut";
-import Apexdonut from "../AllCharts/apex/apexdonut1";
-import SparkLine from "../AllCharts/sparkline/sparkline";
-import SparkLine1 from "../AllCharts/sparkline/sparkline1";
-import Salesdonut from "../AllCharts/apex/salesdonut";
+import Salesdonut from "../AllCharts/apex/salesdonut"
+import TabSessions from "./Tabs"
 
-import "chartist/dist/scss/chartist.scss";
+import "chartist/dist/scss/chartist.scss"
 
-//i18n
-
-const Dashboard = (props) => {
-  const [menu, setMenu] = useState(false);
+const Dashboard = props => {
+  const [menu, setMenu] = useState(false)
   const toggle = () => {
-    setMenu(!menu);
-  };
-  document.title = "Team AMS | Dashboard";
+    setMenu(!menu)
+  }
+  document.title = "Team AMS | Dashboard"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">
@@ -84,11 +78,17 @@ const Dashboard = (props) => {
                       >
                         Attendance
                       </DropdownItem>
-                      <DropdownItem tag="a" href="https://leavemanager.nagarro.com/">
+                      <DropdownItem
+                        tag="a"
+                        href="https://leavemanager.nagarro.com/"
+                      >
                         Leave Manager
                       </DropdownItem>
                       <DropdownItem divider />
-                      <DropdownItem tag="a" href="https://nagarro.sharepoint.com/sites/flexi-seat/SitePages/Homepage.aspx#/">
+                      <DropdownItem
+                        tag="a"
+                        href="https://nagarro.sharepoint.com/sites/flexi-seat/SitePages/Homepage.aspx#/"
+                      >
                         Flexi Seat
                       </DropdownItem>
                     </DropdownMenu>
@@ -216,7 +216,6 @@ const Dashboard = (props) => {
               </Card>
             </Col>
           </Row>
-
           <Row>
             <Col xl={12}>
               <Card>
@@ -232,7 +231,15 @@ const Dashboard = (props) => {
               </Card>
             </Col>
           </Row>
-
+          <Row>
+            <Card>
+              <CardBody>
+                <Col lg={12}>
+                  <TabSessions />
+                </Col>
+              </CardBody>
+            </Card>
+          </Row>
           <Row>
             <Col xl={3}>
               <Card>
@@ -687,11 +694,11 @@ const Dashboard = (props) => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
 Dashboard.propTypes = {
   t: PropTypes.any,
-};
+}
 
-export default Dashboard;
+export default Dashboard
