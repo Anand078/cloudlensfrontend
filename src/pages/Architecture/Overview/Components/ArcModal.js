@@ -379,16 +379,19 @@ const ArcModal = ({ isOpen, handleClose, editRowData }) => {
         editRowData={editRowData}
         centered
         style={customModalSize}
-        backdrop="static" // Prevent closing on click outside
       >
         <ModalHeader className="mt-0">
-          {editRowData?.id != null ? "Edit" : "Add"} Project Details
-          <button
-            type="button"
-            className="btn-close"
-            aria-label="Close"
-            onClick={() => handleClose()}
-          ></button>
+          <div className="d-flex justify-content-between w-100 align-items-center">
+            <span>
+              {editRowData?.id != null ? "Edit" : "Add"} Project Details
+            </span>
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => handleClose()}
+            ></button>
+          </div>
         </ModalHeader>
         <ModalBody>
           <FormValidations

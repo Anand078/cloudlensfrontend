@@ -6,15 +6,15 @@ const ResponseBreakDown = () => {
     series: [
       {
         name: "Compliant",
-        data: [44, 55, 41, 37, 22, 43],
+        data: [40, 50, 40, 35, 25, 40],
       },
       {
         name: "Non Compliant",
-        data: [53, 32, 33, 52, 13, 43],
+        data: [25, 30, 20, 30, 25, 45],
       },
       {
         name: "Not Applicable",
-        data: [12, 17, 11, 9, 15, 11],
+        data: [35, 20, 40, 35, 50, 15],
       },
     ],
     options: {
@@ -50,6 +50,7 @@ const ResponseBreakDown = () => {
       tooltip: {
         y: {
           formatter: function (val) {
+            val = val + "%"
             return val
           },
         },

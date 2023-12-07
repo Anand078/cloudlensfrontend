@@ -1,9 +1,5 @@
 import React, { useState } from "react"
 import {
-  Card,
-  CardBody,
-  CardText,
-  CardTitle,
   Col,
   Nav,
   NavItem,
@@ -15,7 +11,7 @@ import {
 
 import classnames from "classnames"
 
-const UiTabsAccordions = () => {
+const Tabs = () => {
   const [customActiveTab, setCustomActiveTab] = useState("1")
 
   const toggleCustom = tab => {
@@ -25,7 +21,7 @@ const UiTabsAccordions = () => {
   }
 
   return (
-    <>
+    <div>
       <Nav tabs className="nav-tabs-custom">
         <NavItem>
           <NavLink
@@ -58,21 +54,19 @@ const UiTabsAccordions = () => {
       <TabContent activeTab={customActiveTab} className="p-3 text-muted">
         <TabPane tabId="1">
           <Row>
-            <Col sm="12">
-              <CardText className="mb-0">Blog Content here</CardText>
+            <Col lg="12">
             </Col>
           </Row>
         </TabPane>
         <TabPane tabId="2">
           <Row>
-            <Col sm="12">
-              <CardText className="mb-0">Tech Session content here</CardText>
+            <Col lg="12">
             </Col>
           </Row>
         </TabPane>
       </TabContent>
-    </>
+    </div>
   )
 }
 
-export default UiTabsAccordions
+export default Tabs

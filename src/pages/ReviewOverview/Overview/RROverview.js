@@ -188,7 +188,7 @@ function RROverview() {
               <Card className="w-100">
                 <div className="generic-bar"></div>
                 <CardBody>
-                  <h5 className="mt-0 header-title mb-2">Score per Pillar</h5>
+                  <h5 className="mt-0 header-title mb-2">Score per pillar</h5>
                   <div className="mb-0">
                     <BarChart />
                   </div>

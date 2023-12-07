@@ -6,10 +6,7 @@ import {
   Row,
   Col,
   CardTitle,
-  Button,
   Spinner,
-  Modal,
-  ModalBody,
 } from "reactstrap"
 
 import ArcModal from "./Components/ArcModal"
@@ -27,7 +24,6 @@ function AccountOverview() {
   const [deleteRowData, setDeleteRowData] = useState(null)
   const [arbstatusData, setarbstatusData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [showToast, setShowToast] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const baseUrl = process.env.REACT_APP_BASE_URL
   const navigate = useNavigate()
@@ -132,10 +128,10 @@ function AccountOverview() {
 
   const toggleModal = (getData = false) => {
     if (getData) {
-      setShowToast(true)
       fetchData()
     }
-    getData && setIsModalOpen(!isModalOpen)
+    setEditRowData(null)
+    setIsModalOpen(!isModalOpen)
   }
   const handleNavigate = row => {
     navigate(`/arb/${row.projectname}/overview`, { state: row })
@@ -307,14 +303,6 @@ function AccountOverview() {
         onClose={closeDeleteModal}
         onDelete={handleDelete}
       />
-      {/* {showToast && (
-        <Modal isOpen={showToast} toggle={() => setShowToast(false)} centered>
-          <ModalBody
-          >
-            Data is been successfully updated
-          </ModalBody>
-        </Modal>
-      )} */}
     </>
   )
 }

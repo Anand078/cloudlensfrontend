@@ -34,9 +34,9 @@ const BarChart = () => {
         color: "black",
         align: "end",
         anchor: "end",
-        font: { size: "15" },
+        font: { size: "12" },
         formatter: (value, context) => {
-         
+          value  = value + "%"
           return value
         },
       },
