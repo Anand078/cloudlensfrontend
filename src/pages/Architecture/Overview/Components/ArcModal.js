@@ -23,7 +23,7 @@ import {
 import * as Yup from "yup"
 import { useFormik } from "formik"
 
-const FormValidations = ({ editRowData, onCloseModal }) => {
+const ARBModal = ({ editRowData, onCloseModal }) => {
   const [isSaving, setIsSaving] = useState(false)
   const baseUrl = process.env.REACT_APP_BASE_URL
 
@@ -380,21 +380,21 @@ const ArcModal = ({ isOpen, handleClose, editRowData }) => {
         centered
         style={customModalSize}
       >
-        <ModalHeader className="mt-0">
-          <div className="d-flex justify-content-between w-100 align-items-center">
-            <span>
+        <div className="mt-1 d-flex justify-content-between align-items-center">
+          <h5 className="mt-3">
+            <span style={{marginLeft:"15px"}}>
               {editRowData?.id != null ? "Edit" : "Add"} Project Details
             </span>
-            <button
-              type="button"
-              className="btn-close"
-              aria-label="Close"
-              onClick={() => handleClose()}
-            ></button>
-          </div>
-        </ModalHeader>
+          </h5>
+          <button style={{marginRight:"14px"}}
+            type="button"
+            className="btn btn-close"
+            aria-label="Close"
+            onClick={() => handleClose()}
+          ></button>
+        </div>
         <ModalBody>
-          <FormValidations
+          <ARBModal
             editRowData={editRowData}
             onCloseModal={val => handleClose(val)}
           />
