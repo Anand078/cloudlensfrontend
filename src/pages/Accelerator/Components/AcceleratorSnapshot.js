@@ -52,7 +52,10 @@ const AccSnap = () => {
   const [initialData, setInitialData] = useState([])
   const inputRefs = useRef({})
   const [searchTerm, setSearchTerm] = useState("") // Step 1
-
+  const [sortIcon, setSortIcon] = useState(null)
+  const [sortColumn, setSortColumn] = useState(null)
+  const [sortOrder, setSortOrder] = useState("asc")
+  const [sortedData, setSortedData] = useState([])
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -68,24 +71,38 @@ const AccSnap = () => {
     setSelectedAccName(accname)
   }
 
-  const activityData = [
-    {
-      date: "Nov 10 1:30PM",
-      text: "Had a staring contest with the 'Loading...' spinner. It blinked first.",
-    },
-    {
-      date: "Nov 8 4:45PM",
-      text: "Tried to explain code to a rubber duck. The duck looked confused but nodded in agreement.",
-    },
-    {
-      date: "Nov 6 10:15AM",
-      text: "Accidentally pushed code to production while practicing my drumming on the keyboard. Surprisingly, no one noticed.",
-    },
-    {
-      date: "Nov 4 3:20PM",
-      text: "Attended a 'Stand-up' meeting while actually lying down. Nailed it!",
-    },
-  ]
+  const sortData = (column, order) => {
+    const sorted = [...sortedData]
+    sorted.sort((a, b) => {
+      const valueA = (a[column] || "").toString().toLowerCase()
+      const valueB = (b[column] || "").toString().toLowerCase()
+
+      if (valueA < valueB) {
+        return order === "asc" ? -1 : 1
+      }
+      if (valueA > valueB) {
+        return order === "asc" ? 1 : -1
+      }
+      return 0
+    })
+
+    setSortedData(sorted)
+
+    setSortIcon(
+      order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
+    )
+  }
+
+  const handleHeaderClick = column => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+    } else {
+      setSortColumn(column)
+      setSortOrder("asc")
+    }
+
+    sortData(column, sortOrder)
+  }
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
@@ -104,6 +121,7 @@ const AccSnap = () => {
 
       setData(filteredData)
       setInitialData(filteredData)
+      setSortedData(filteredData)
 
       setEditableState({
         accNames: useEditableState(filteredData),
@@ -366,7 +384,7 @@ const AccSnap = () => {
                 style={{ width: "15rem" }}
               />
               <Button color="primary" onClick={handleAddRow}>
-                <i className="ion ion-md-add"></i> 
+                <i className="ion ion-md-add"></i>
               </Button>
               <Button color="primary" disabled={isSaving} onClick={handleSave}>
                 {isSaving ? (
@@ -386,18 +404,75 @@ const AccSnap = () => {
                 >
                   <thead>
                     <tr>
-                      <th scope="col">Accelerators & Initiatives Name</th>
-                      <th scope="col">Version</th>
-                      <th scope="col">Indicative Timeline</th>
-                      <th scope="col">Resource Requirement</th>
-                      <th scope="col">Blocker</th>
-                      <th scope="col">Comments</th>
-                      <th scope="col">Last Updated</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("accname")}>Accelerators & Initiatives Name
+                         &nbsp;&nbsp;
+                        {sortColumn === "accname" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("version")}>Version &nbsp;&nbsp;
+                        {sortColumn === "version" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("indicativetimeline")}>Indicative Timeline &nbsp;&nbsp;
+                        {sortColumn === "indicativetimeline" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("resourcerequirement")}>Resource Requirement &nbsp;&nbsp;
+                        {sortColumn === "resourcerequirement" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("blocker")}>Blocker &nbsp;&nbsp;
+                        {sortColumn === "blocker" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("comments")}>Comments &nbsp;&nbsp;
+                        {sortColumn === "comments" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
+                      <th style={{
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("updatedon")}>Last Updated &nbsp;&nbsp;
+                        {sortColumn === "updatedon" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}</th>
                       <th scope="col">Activity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentData.map(item => (
+                    {sortedData.map(item => (
                       <tr key={item.id}>
                         <td
                           className="text-left"

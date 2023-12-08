@@ -1,7 +1,7 @@
 import React from "react"
 import { Container, Row, Col, Card, CardBody } from "reactstrap"
 import Breadcrumb from "components/Common/Breadcrumb"
-import AccSnap from "../Components/AccSnap"
+import AcceleratorSnapshot from "../Components/AcceleratorSnapshot"
 
 const OverViewCont = () => {
   document.title = "Cloud-Lens | Accelerator "
@@ -22,7 +22,7 @@ const OverViewCont = () => {
                   <Row>
                     <Col lg={12}>
                       <div>
-                        <AccSnap/>
+                        <AcceleratorSnapshot/>
                       </div>
                     </Col>
                   </Row>
