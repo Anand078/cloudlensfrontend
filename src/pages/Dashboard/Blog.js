@@ -1,0 +1,399 @@
+import React, { useState, useEffect, useRef } from "react"
+import { Table, Button, Row, Col, Spinner, Container, Input } from "reactstrap"
+import Pagination from "react-js-pagination"
+import isEqual from "lodash/isEqual"
+
+const useEditableState = (data, initialValue = false) => {
+  return data.reduce((blog, item) => {
+    blog[item.id] = initialValue
+    return blog
+  }, {})
+}
+
+const EditableInput = ({
+  id,
+  value,
+  editable,
+  onChange,
+  onBlur,
+  inputRef,
+  autoFocus,
+}) =>
+  editable ? (
+    <Input
+      type="text"
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      innerRef={inputRef}
+      data-id={id}
+      autoFocus={autoFocus}
+    />
+  ) : (
+    value
+  )
+
+const Blog = () => {
+  const baseUrl = process.env.REACT_APP_BASE_URL
+  const [isLoading, setIsLoading] = useState(true)
+  const [data, setData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(10)
+  const [editableState, setEditableState] = useState({
+    subject: useEditableState(data),
+  })
+
+  const [isSaving, setIsSaving] = useState(false)
+  const [initialData, setInitialData] = useState([])
+  const inputRefs = useRef({})
+  const [searchTerm, setSearchTerm] = useState("")
+  const [sortIcon, setSortIcon] = useState(null)
+  const [sortColumn, setSortColumn] = useState(null)
+  const [sortOrder, setSortOrder] = useState("asc")
+  const [sortedData, setSortedData] = useState([])
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
+
+  const handlePageChange = pageNumber => {
+    setCurrentPage(pageNumber)
+  }
+
+  const sortData = (column, order) => {
+    const sorted = [...sortedData]
+    sorted.sort((a, b) => {
+      const valueA = (a[column] || "").toString().toLowerCase() // Check for undefined and use an empty string
+      const valueB = (b[column] || "").toString().toLowerCase() // Check for undefined and use an empty string
+
+      if (valueA < valueB) {
+        return order === "asc" ? -1 : 1
+      }
+      if (valueA > valueB) {
+        return order === "asc" ? 1 : -1
+      }
+      return 0
+    })
+
+    setSortedData(sorted)
+
+    // Set the sorting icon based on the order
+    setSortIcon(
+      order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
+    )
+  }
+
+  const handleHeaderClick = column => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+    } else {
+      setSortColumn(column)
+      setSortOrder("asc")
+    }
+
+    sortData(column, sortOrder)
+  }
+
+  const fetchData = async () => {
+    try {
+      const [blogResp] = await Promise.all([fetch(baseUrl + "/blog")])
+      const blogData = await blogResp.json()
+
+      const filteredData = blogData.data.filter(item =>
+        Object.values(item).some(value =>
+          value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+
+      setData(filteredData)
+      setInitialData(filteredData)
+      setSortedData(filteredData)
+      setEditableState({
+        subject: useEditableState(filteredData),
+      })
+
+      setIsLoading(false)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
+  }
+
+  const generateNegativeNumber = () => {
+    const randomNumber = Math.floor(Math.random() * Math.pow(10, 6))
+    const negativeNumber = -1 * randomNumber
+    return negativeNumber
+  }
+
+  const handleAddRow = () => {
+    const newId = generateNegativeNumber()
+    const newRow = {
+      id: newId,
+      subject: "",
+      updatedon: new Date(),
+    }
+
+    setData(prevData => [newRow, ...prevData])
+    setEditableState(prevState => ({
+      ...prevState,
+      subject: { ...prevState.subject, [newId]: true },
+    }))
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [searchTerm]) // Update useEffect to include searchTerm
+
+  useEffect(() => {
+    const handleClick = event => {
+      Object.values(inputRefs.current).forEach(ref => {
+        if (ref && !ref.contains(event.target)) {
+          handleBlur(ref.getAttribute("data-id"))
+        }
+      })
+    }
+
+    document.addEventListener("mousedown", handleClick)
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick)
+    }
+  }, [])
+
+  const handleEditToggle = (field, id) => {
+    setEditableState(prevState => ({
+      ...prevState,
+      [field]: { ...prevState[field], [id]: !prevState[field][id] },
+    }))
+  }
+
+  const handleSubjectChange = (id, event) => {
+    const updatedData = data.map(item =>
+      item.id === id
+        ? { ...item, subject: event.target.value, updatedon: new Date() }
+        : item
+    )
+    setData(updatedData)
+  }
+
+  const handleBlur = id => {
+    setEditableState(prevState => ({
+      ...prevState,
+      subject: { ...prevState.subject, [id]: false },
+    }))
+  }
+
+  const handleInputRef = (id, ref) => {
+    inputRefs.current[id] = ref
+  }
+
+  const handleSearchChange = event => {
+    setSearchTerm(event.target.value)
+  }
+
+  const handleReloadClick = async () => {
+    setIsLoading(true)
+    try {
+      await fetchData()
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  const handleSave = async () => {
+    try {
+      setIsSaving(true)
+
+      const modifiedData = data.filter(
+        item =>
+          !isEqual(
+            item,
+            initialData.find(initialItem => initialItem.id === item.id)
+          )
+      )
+
+      console.log("mod", modifiedData)
+
+      if (modifiedData.length > 0) {
+        await saveData(modifiedData)
+        fetchData()
+      } else {
+        console.log("No changes to save.")
+      }
+    } catch (error) {
+      console.error("Error saving data:", error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const saveData = async modifiedData => {
+    debugger
+    try {
+      const response = await fetch(baseUrl + "/blog", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(modifiedData),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save data")
+      }
+      console.log("saved successfully")
+    } catch (error) {
+      console.error("Error saving data:", error)
+    }
+  }
+
+  const formatDate = dateString => {
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    }
+    return new Date(dateString).toLocaleString(undefined, options)
+  }
+
+  return (
+    <>
+      {isLoading ? (
+        <div className="d-flex justify-content-center align-items-center">
+          <Spinner type="grow" className="ms-2" color="success" />
+          <Spinner type="grow" className="ms-2" color="danger" />
+          <Spinner type="grow" className="ms-2" color="warning" />
+          <Spinner type="grow" className="ms-2" color="info" />
+        </div>
+      ) : (
+        <Container fluid>
+          <Row className="mb-2">
+            <Col
+              sm="12"
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                gap: "0.3rem",
+              }}
+            >
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                style={{ width: "15rem" }}
+              />
+              <Button color="primary" onClick={handleAddRow}>
+                <i className="ion ion-md-add"></i>
+              </Button>
+              <Button color="primary" disabled={isSaving} onClick={handleSave}>
+                {isSaving ? (
+                  <Spinner size="sm" color="light" />
+                ) : (
+                  <i className="ion ion-md-save"></i>
+                )}
+              </Button>
+              <Button color="primary" onClick={handleReloadClick}>
+                <i className="mdi mdi-reload"></i>
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12">
+              <div className="table-responsive">
+                <Table
+                  className="table table-hover table-centered table-nowrap mb-0"
+                  style={{ backgroundColor: "white" }}
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          width: "20%",
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("updatedon")}
+                      >
+                        Date &nbsp;&nbsp;
+                        {sortColumn === "updatedon" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
+                      <th
+                        style={{
+                          width: "80%",
+                          cursor: "pointer",
+                          userSelect: "none" 
+                        }}
+                        scope="col"
+                        onClick={() => handleHeaderClick("subject")}
+                      >
+                        Subject &nbsp;&nbsp;
+                        {sortColumn === "subject" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedData.map(item => (
+                      <tr key={item.id}>
+                        <td className="text-left">
+                          {formatDate(item.updatedon)}
+                        </td>
+                        <td
+                          onDoubleClick={() =>
+                            handleEditToggle("subject", item.id)
+                          }
+                          style={{
+                            width: "80%",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {editableState.subject[item.id] ? (
+                            <EditableInput
+                              id={item.id}
+                              value={item.subject}
+                              editable={editableState.subject[item.id]}
+                              onChange={e => handleSubjectChange(item.id, e)}
+                              onBlur={() => handleBlur(item.id)}
+                              inputRef={ref => handleInputRef(item.id, ref)}
+                            />
+                          ) : (
+                            item.subject
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col style={{ display: "flex", justifyContent: "end" }}>
+              <Pagination
+                activePage={currentPage}
+                itemsCountPerPage={itemsPerPage}
+                totalItemsCount={data.length}
+                pageRangeDisplayed={5}
+                itemClass="page-item"
+                linkClass="page-link"
+                onChange={handlePageChange}
+              />
+            </Col>
+          </Row>
+        </Container>
+      )}
+    </>
+  )
+}
+
+export default Blog

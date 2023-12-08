@@ -21,7 +21,7 @@ import CapModal from "./Components/CpModal"
 import PieChart from "./Components/piechart"
 
 function AccountOverview() {
-  document.title = "AMS Dashboard | Capabilities"
+  document.title = "Cloud-Lens | Capabilities"
   const dispatch = useDispatch()
   const [accOverviewData, setAccOverviewData] = useState(null)
   const [barData, setBarData] = useState(null)

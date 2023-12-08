@@ -366,7 +366,7 @@ const AccSnap = () => {
                 style={{ width: "15rem" }}
               />
               <Button color="primary" onClick={handleAddRow}>
-                <i className="ion ion-md-add"></i>
+                <i className="ion ion-md-add"></i> 
               </Button>
               <Button color="primary" disabled={isSaving} onClick={handleSave}>
                 {isSaving ? (

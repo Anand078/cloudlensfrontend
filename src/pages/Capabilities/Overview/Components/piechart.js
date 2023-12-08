@@ -35,7 +35,7 @@ const Pie = ({ accOverviewdata }) => {
         formatter: "{a} <br/>{b} : {c} ({d}%)",
       },
       legend: {
-        orient: "vertical",
+        orient: "horizontal",
         left: "left",
         data: accountArray,
         textStyle: {

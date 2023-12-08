@@ -4,17 +4,11 @@ import Breadcrumb from "components/Common/Breadcrumb"
 import RRReport from "./RRReport"
 
 const OverViewCont = id => {
-  document.title = "AMS Dashboard | Review Report"
+  document.title = "Cloud-Lens | Review Report"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">
         <Container fluid>
-          {/* <Breadcrumb
-            maintitle="AMS Dashboard"
-            title="Review Overview"
-            breadcrumbItem="Review Report"
-            path={`arb/:projectname/review`}
-          /> */}
           <Row>
             <Col
               xs="12"

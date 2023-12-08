@@ -38,7 +38,7 @@ const Dashboard = props => {
   const toggle = () => {
     setMenu(!menu)
   }
-  document.title = "Team AMS | Dashboard"
+  document.title = "Cloud-Lens | Dashboard"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">
@@ -49,7 +49,7 @@ const Dashboard = props => {
                 <h6 className="page-title">Dashboard</h6>
                 <ol className="breadcrumb m-0">
                   <li className="breadcrumb-item active">
-                    Welcome to AMS Dashboard
+                    Welcome to Cloud-Lens
                   </li>
                 </ol>
               </Col>

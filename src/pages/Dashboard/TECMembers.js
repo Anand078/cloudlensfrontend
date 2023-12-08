@@ -59,9 +59,13 @@ const TECMember = () => {
   const [initialData, setInitialData] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSkills, setSelectedSkills] = useState([])
-
+  const [sortColumn, setSortColumn] = useState(null)
+  const [sortOrder, setSortOrder] = useState("asc")
+  const [sortedData, setSortedData] = useState([])
+  const [sortIcon, setSortIcon] = useState(null)
   const [isSaving, setIsSaving] = useState(false)
   const [isSkillSelectModalOpen, setSkillSelectModalOpen] = useState(false)
+  
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -103,12 +107,47 @@ const TECMember = () => {
     setCurrentPage(pageNumber)
   }
 
+  const sortData = (column, order) => {
+    const sorted = [...sortedData]
+    sorted.sort((a, b) => {
+      const valueA = (a[column] || "").toString().toLowerCase() 
+      const valueB = (b[column] || "").toString().toLowerCase() 
+
+      if (valueA < valueB) {
+        return order === "asc" ? -1 : 1
+      }
+      if (valueA > valueB) {
+        return order === "asc" ? 1 : -1
+      }
+      return 0
+    })
+
+    setSortedData(sorted)
+
+    // Set the sorting icon based on the order
+    setSortIcon(
+      order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
+    )
+  }
+
+  const handleHeaderClick = column => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+    } else {
+      setSortColumn(column)
+      setSortOrder("asc")
+    }
+
+    sortData(column, sortOrder)
+  }
+
   const fetchData = async () => {
     try {
       const [tecResp] = await Promise.all([fetch(baseUrl + "/tecmember")])
       const tecData = await tecResp.json()
       setData(tecData.data)
       setInitialData(tecData.data)
+      setSortedData(tecData.data)
       setSwitches(
         tecData.data.reduce((acc, item) => {
           acc[item.id] = item.isavailable
@@ -472,17 +511,53 @@ const TECMember = () => {
                 >
                   <thead>
                     <tr>
-                      <th scope="col">TEC Member</th>
-                      <th scope="col">Project</th>
+                      <th
+                        scope="col"
+                        onClick={() => handleHeaderClick("member")}
+                        style={{ cursor: "pointer", userSelect: "none"  }}
+                      >
+                        TEC Member &nbsp;&nbsp;
+                        {sortColumn === "member" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
+                      <th
+                        scope="col"
+                        onClick={() => handleHeaderClick("project")}
+                        style={{ cursor: "pointer", userSelect: "none"  }}
+                      >
+                        Project &nbsp;&nbsp;
+                        {sortColumn === "project" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
                       <th scope="col">Core Skills</th>
                       <th scope="col">Availability</th>
-                      <th scope="col">Comments</th>
-                      <th scope="col">Last updated</th>
+                      <th
+                        scope="col"
+                        style={{ cursor: "pointer", userSelect: "none"  }}
+                        onClick={() => handleHeaderClick("comments")}
+                      >
+                        Comments&nbsp;&nbsp;
+                        {sortColumn === "comments" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
+                      <th
+                        scope="col"
+                        style={{ cursor: "pointer", userSelect: "none"  }}
+                        onClick={() => handleHeaderClick("updatedon")}
+                      >
+                        Last updated&nbsp;&nbsp;
+                        {sortColumn === "updatedon" && (
+                          <i className={`${sortIcon}`}></i>
+                        )}
+                      </th>
                       <th scope="col">Activity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentData.map(item => (
+                    {sortedData.map(item => (
                       <tr key={item.id}>
                         <td
                           className="text-left"

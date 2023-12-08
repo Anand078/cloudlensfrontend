@@ -6,15 +6,16 @@ const ResponseBreakDown = () => {
     series: [
       {
         name: "Compliant",
-        data: [40, 50, 40, 35, 25, 40],
+        data: [25, 28, 21, 55, 28, 40],
       },
       {
         name: "Non Compliant",
-        data: [25, 30, 20, 30, 25, 45],
+        data: [71, 61, 54, 33, 36, 43],
       },
+
       {
         name: "Not Applicable",
-        data: [35, 20, 40, 35, 50, 15],
+        data: [4, 11, 25, 12, 36, 17],
       },
     ],
     options: {
@@ -63,7 +64,7 @@ const ResponseBreakDown = () => {
         horizontalAlign: "center",
         offsetX: 100,
       },
-      colors: ["#E34F68", "#00E895", "#e3e0e0"],
+      colors: ["#00E895", "#E34F68", "#e3e0e0"],
     },
   }
 

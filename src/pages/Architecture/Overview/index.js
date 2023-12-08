@@ -4,7 +4,7 @@ import Breadcrumb from "components/Common/Breadcrumb"
 import ArbOverview from "./ArbOverview"
 
 const OverViewCont = () => {
-  document.title = "AMS Dashboard | Architecture Review Board"
+  document.title = "Cloud-Lens | Architecture Review Board"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">

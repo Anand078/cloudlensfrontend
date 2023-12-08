@@ -261,7 +261,7 @@ function AccountOverview() {
             <Col lg={8} className="d-flex">
               <Card className="w-100">
                 <CardBody>
-                  <CardTitle className="h4 mb-4">Technology Overview</CardTitle>
+                  <CardTitle className="h4 mb-4">Pillar Overview</CardTitle>
                   <BarChart />
                 </CardBody>
               </Card>

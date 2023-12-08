@@ -4,7 +4,7 @@ import Breadcrumb from "components/Common/Breadcrumb"
 import AccSnap from "../Components/AccSnap"
 
 const OverViewCont = () => {
-  document.title = "AMS Dashboard | Accelerator "
+  document.title = "Cloud-Lens | Accelerator "
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">

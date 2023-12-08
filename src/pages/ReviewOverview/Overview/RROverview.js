@@ -46,7 +46,7 @@ function RROverview() {
           <Spinner type="grow" className="ms-2" color="info" />
         </div>
       ) : (
-        <Container fluid style={{marginTop:"30px"}}>
+        <Container fluid style={{ marginTop: "30px" }}>
           {/* <Row
             className="col-12"
             style={{
@@ -170,14 +170,14 @@ function RROverview() {
                   <CardTitle className="h4 mb-4">Project Score</CardTitle>
                   <Progress
                     className="my-2"
-                    value="49"
+                    value="39"
                     style={{
                       height: "30px",
                       fontSize: "1rem",
                       fontWeight: 500,
                     }}
                   >
-                    49%
+                    39%
                   </Progress>
                 </CardBody>
               </Card>

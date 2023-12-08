@@ -10,6 +10,8 @@ import {
 } from "reactstrap"
 
 import classnames from "classnames"
+import Blog from "./Blog"
+import TechSession from "./TechSessions"
 
 const Tabs = () => {
   const [customActiveTab, setCustomActiveTab] = useState("1")
@@ -55,12 +57,14 @@ const Tabs = () => {
         <TabPane tabId="1">
           <Row>
             <Col lg="12">
+              <Blog />
             </Col>
           </Row>
         </TabPane>
         <TabPane tabId="2">
           <Row>
             <Col lg="12">
+              <TechSession />
             </Col>
           </Row>
         </TabPane>

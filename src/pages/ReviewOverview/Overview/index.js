@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap"
 import RROverview from "./RROverview"
 
 const RROverviewIndex = id => {
-  document.title = "AMS Dashboard | Review Report"
+  document.title = " Cloud-Lens | Review Report"
   return (
     <React.Fragment>
       <div className="page-content custom-scrollbar">

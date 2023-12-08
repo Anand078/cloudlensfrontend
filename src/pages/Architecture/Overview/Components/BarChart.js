@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2"
 import "chartjs-plugin-datalabels"
 
 const BarChart = () => {
-  const dataValues = [51, 72, 39, 24, 65, 47]
+  const dataValues = [26, 31, 27, 63, 44, 49]
   const total = dataValues.reduce((acc, value) => acc + value, 0)
 
   const data = {
@@ -77,7 +77,7 @@ const BarChart = () => {
 
   return (
     <React.Fragment>
-      <Bar width={700} height={400} data={data} options={options} />
+      <Bar width={700} height={300} data={data} options={options} />
     </React.Fragment>
   )
 }

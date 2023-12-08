@@ -6,11 +6,8 @@ function extractAccount(piedata) {
   const accountArray = []
 
   for (const key in piedata) {
-    if (
-        piedata.hasOwnProperty(key) &&
-        piedata[key].hasOwnProperty("status")
-    ) {
-        accountArray.push(piedata[key].status)
+    if (piedata.hasOwnProperty(key) && piedata[key].hasOwnProperty("status")) {
+      accountArray.push(piedata[key].status)
     }
   }
 
@@ -24,7 +21,14 @@ const Pie = ({ piedata }) => {
 
   const accountArray = extractAccount(piedata)
 
-  const colors = ColorPicker(piedata?.length)
+  const colors = [
+    "#2F4858",
+    "#61FF64",
+    "#00E895",
+    "#00CDC2",
+    "#00AFE3",
+    "#006ADF",
+  ].reverse() //ColorPicker(piedata?.length)
   const getOption = () => {
     return {
       toolbox: {
@@ -35,7 +39,7 @@ const Pie = ({ piedata }) => {
         formatter: "{a} <br/>{b} : {c} ({d}%)",
       },
       legend: {
-        orient: "vertical",
+        orient: "horizontal",
         left: "left",
         data: accountArray,
         textStyle: {
