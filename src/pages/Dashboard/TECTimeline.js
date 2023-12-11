@@ -1,28 +1,35 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap"
-
-import "./TimelineModal.css"
+import styled from "styled-components"
 import emptyData from "../../assets/images/emptydata.svg"
+import { format } from "date-fns" // Importing date-fns format function
+
+const StyledModalBody = styled(ModalBody)`
+  max-height: 400px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+`
+
 const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL
-
   const [apiData, setApiData] = useState([])
   const [loading, setLoading] = useState(false)
   const isMounted = useRef(true)
 
   const formatDateTime = dateTimeString => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-    const formattedDate = new Date(dateTimeString).toLocaleString(
-      "en-US",
-      options
-    )
-    return formattedDate
+    return format(new Date(dateTimeString), "yyyy MMM dd HH:mm")
   }
 
   useEffect(() => {
@@ -77,13 +84,10 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered>
       <ModalHeader toggle={toggle}>{selectedProject} - Activity</ModalHeader>
-      <ModalBody className="timeline-scrollbar d-flex align-items-center justify-content-center">
+      <StyledModalBody className="timeline-scrollbar d-flex align-items-center justify-content-center">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center">
-            <Spinner type="grow" className="ms-2" color="success" />
-            <Spinner type="grow" className="ms-2" color="danger" />
-            <Spinner type="grow" className="ms-2" color="warning" />
-            <Spinner type="grow" className="ms-2" color="info" />
+            <Spinner type="grow" className="ms-2" color="primary" />
           </div>
         ) : (
           <ol className="activity-feed">
@@ -110,7 +114,7 @@ const TimelineModal = ({ isOpen, toggle, selectedTecId, selectedProject }) => {
             )}
           </ol>
         )}
-      </ModalBody>
+      </StyledModalBody>
     </Modal>
   )
 }

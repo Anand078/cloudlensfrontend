@@ -10,7 +10,7 @@ import {
   Button,
 } from "reactstrap"
 
-import ArcModal from "./Components/ArcModal"
+import ArcModal from "./Components/ARBModal"
 import Pie from "./Components/piechart"
 import BarChart from "./Components/BarChart"
 

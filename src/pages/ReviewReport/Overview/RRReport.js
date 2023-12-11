@@ -21,7 +21,6 @@ import "./Components/RROverview.css"
 import { useLocation } from "react-router-dom"
 import classnames from "classnames"
 import { useDispatch } from "react-redux"
-import { current } from "@reduxjs/toolkit"
 
 function RRReport() {
   const baseUrl = process.env.REACT_APP_BASE_URL
@@ -31,21 +30,26 @@ function RRReport() {
   const [activeTab, setactiveTab] = useState(1)
   const dispatsch = useDispatch()
   const [arbReview, setArbReview] = useState([])
+  const [arbResponseData, setArbResponseData] = useState([])
   const [tabItems, setTabItems] = useState([])
   const [topicsById, setTopicsById] = useState([])
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0)
   const [filteredPractices, setFilteredPractices] = useState([])
-  const [selectedResponses, setSelectedResponses] = useState(
-    Array(filteredPractices.length).fill(null)
-  )
+  const [isSaving, setIsSaving] = useState(false)
+  const [selectedResponses, setSelectedResponses] = useState({})
+  // const handleResponse = (id, response) => {
+  //   setSelectedResponses(prevResponses => {
+  //     const updatedResponses = [...prevResponses]
+  //     updatedResponses[id] = response
+  //     return updatedResponses
+  //   })
+  // }
 
   const handleResponse = (id, response) => {
-    setSelectedResponses(prevResponses => {
-      const updatedResponses = [...prevResponses]
-      updatedResponses[id] = response
-      console.log("responseData", updatedResponses)
-      return updatedResponses
-    })
+    setSelectedResponses(prevResponses => ({
+      ...prevResponses,
+      [id]: response,
+    }))
   }
 
   function toggleTab(tab) {
@@ -57,13 +61,20 @@ function RRReport() {
   }
   const fetchData = async () => {
     try {
-      const [reviewResp] = await Promise.all([fetch(baseUrl + "/arbreview")])
+      const [reviewResp, arbResResp] = await Promise.all([
+        fetch(baseUrl + "/arbreview"),
+        fetch(baseUrl + "/arbresponse/" + rowData.id),
+      ])
 
       const reviewData = await reviewResp.json()
+      const arbResponseData = await arbResResp.json()
+
       setArbReview(reviewData.data)
-      const uniquePillars = Array.from(
-        new Set(reviewData?.data.map(item => item.pillarname))
-      )
+      setArbResponseData(arbResponseData.data)
+
+      const uniquePillars = [
+        ...new Set(reviewData.data.map(item => item.pillarname)),
+      ]
       setTabItems(uniquePillars)
 
       setIsLoading(false)
@@ -73,11 +84,13 @@ function RRReport() {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (rowData.id) {
+      fetchData()
+    }
+  }, [rowData.id])
 
   useEffect(() => {
-    if (arbReview.length === 0) {
+    if (arbReview?.length === 0) {
       fetchData()
     } else {
       AssignReviewData(activeTab)
@@ -101,16 +114,49 @@ function RRReport() {
       item => item.topic === currentTopic
     )
     setFilteredPractices(practicesForCurrentTopic)
+
+    let responses = []
+
+    if (
+      arbResponseData &&
+      arbResponseData.response &&
+      typeof arbResponseData.response === "string"
+    ) {
+      const responseArray = arbResponseData.response.split(",")
+      responses = responseArray.map(item => {
+        const [bestpracticeid, response] = item.split(":")
+        handleResponse(bestpracticeid, response)
+        selectedResponses[bestpracticeid] = response
+        console.log("selectedResponses", selectedResponses)
+      })
+    } else {
+      console.error("Invalid or missing response data:", arbResponseData)
+    }
   }
 
   const handlePrevious = () => {
-    setCurrentTopicIndex(prevIndex => Math.max(prevIndex - 1, 0))
+    setCurrentTopicIndex(prevIndex => {
+      saveResponses()
+      return Math.max(prevIndex - 1, 0)
+    })
   }
 
   const handleNext = () => {
-    setCurrentTopicIndex(prevIndex =>
-      Math.min(prevIndex + 1, topicsById.length - 1)
-    )
+    setCurrentTopicIndex(prevIndex => {
+      saveResponses()
+      return Math.min(prevIndex + 1, topicsById.length - 1)
+    })
+  }
+
+  const saveResponses = () => {
+    setSelectedResponses(currentResponses => {
+      const updatedResponses = { ...currentResponses }
+      filteredPractices.forEach(bestPractice => {
+        const response = selectedResponses[bestPractice.bestpracticeid] || ""
+        updatedResponses[bestPractice.bestpracticeid] = response
+      })
+      return updatedResponses
+    })
   }
 
   const handleCheckboxChange = event => {
@@ -120,6 +166,56 @@ function RRReport() {
       const response = isChecked ? "NA" : "No"
       handleResponse(bestPractice.bestpracticeid, response)
     })
+  }
+
+  const handleSave = async () => {
+    setIsSaving(true)
+
+    // console.log("anand ", selectedResponses)
+    const responsesArray = Object.entries(selectedResponses)
+      .map(([id, response]) => `${id}:${response}`)
+      .filter(entry => entry.split(":")[1].trim() !== "")
+
+    const strResponse = responsesArray.join(",")
+    // console.log("strResponse ", strResponse)
+
+    const payload = {
+      projectid: rowData.id,
+      response: strResponse,
+      updatedon: new Date(),
+    }
+
+    try {
+      let response
+      if (arbResponseData == null) {
+        response = await fetch(baseUrl + "/arbresponse", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+      } else {
+        response = await fetch(baseUrl + "/arbresponse/" + rowData.id, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+      }
+
+      const result = await response.json()
+      if (result.success === true) {
+        console.log("success")
+      } else {
+        console.log("error while posting or updating arb data")
+      }
+    } catch (error) {
+      console.error("error while saving the data", error)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -133,7 +229,6 @@ function RRReport() {
         </div>
       ) : (
         <Container fluid>
-         
           <Row>
             <Col sm="3">
               <Row>
@@ -359,8 +454,14 @@ function RRReport() {
                     </Button>
                   </div>
                   <div>
-                    <Button color="primary" style={{ marginRight: "2rem" }}>
-                      Submit
+                    <Button
+                      type="submit"
+                      color="primary"
+                      style={{ marginRight: "2rem" }}
+                      onClick={handleSave}
+                      disabled={isSaving}
+                    >
+                      {isSaving ? "Saving..." : "Submit"}
                     </Button>
                   </div>
                 </CardBody>

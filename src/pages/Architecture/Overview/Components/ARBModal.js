@@ -366,7 +366,7 @@ const ARBModal = ({ editRowData, onCloseModal }) => {
   )
 }
 
-const ArcModal = ({ isOpen, handleClose, editRowData }) => {
+const ArbModal = ({ isOpen, handleClose, editRowData }) => {
   const customModalSize = {
     maxWidth: "950px",
   }
@@ -382,11 +382,12 @@ const ArcModal = ({ isOpen, handleClose, editRowData }) => {
       >
         <div className="mt-1 d-flex justify-content-between align-items-center">
           <h5 className="mt-3">
-            <span style={{marginLeft:"15px"}}>
+            <span style={{ marginLeft: "15px" }}>
               {editRowData?.id != null ? "Edit" : "Add"} Project Details
             </span>
           </h5>
-          <button style={{marginRight:"14px"}}
+          <button
+            style={{ marginRight: "14px" }}
             type="button"
             className="btn btn-close"
             aria-label="Close"
@@ -404,4 +405,4 @@ const ArcModal = ({ isOpen, handleClose, editRowData }) => {
   )
 }
 
-export default ArcModal
+export default ArbModal
