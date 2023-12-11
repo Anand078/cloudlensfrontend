@@ -7,6 +7,7 @@ import {
   Col,
   CardTitle,
   Spinner,
+  Button,
 } from "reactstrap"
 
 import ArcModal from "./Components/ArcModal"
@@ -17,7 +18,7 @@ import { useDispatch } from "react-redux"
 import { MDBDataTable } from "mdbreact"
 import DeleteConfirmationModal from "./Components/DeleteArc"
 import { useNavigate, Link } from "react-router-dom"
-function AccountOverview() {
+function ARBOverview() {
   const dispatch = useDispatch()
   const [arbData, setArbData] = useState([])
   const [editRowData, setEditRowData] = useState(null)
@@ -138,20 +139,13 @@ function AccountOverview() {
   }
 
   const getProjectNameCell = rowData => (
-    <a
-      style={{
-        fontWeight: "500",
-        color: "black",
-        transition: "color 0.3s ease",
-        textDecoration: "none",
-        cursor: "pointer",
-      }}
+    <Button
       onClick={() => handleNavigate(rowData)}
-      onMouseOver={e => (e.target.style.color = "blue")}
-      onMouseOut={e => (e.target.style.color = "black")}
+      // onMouseOver={e => (e.target.style.color = "blue")}
+      // onMouseOut={e => (e.target.style.color = "black")}
     >
       {rowData.projectname}
-    </a>
+    </Button>
   )
 
   const getEditCell = rowData => (
@@ -186,6 +180,7 @@ function AccountOverview() {
         field: "projectname",
         sort: "asc",
         width: 100,
+        searchLabel: "Search by Project Name",
       },
       {
         label: "Project Owner",
@@ -307,4 +302,4 @@ function AccountOverview() {
   )
 }
 
-export default AccountOverview
+export default ARBOverview

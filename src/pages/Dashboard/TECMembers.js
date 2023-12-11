@@ -65,7 +65,6 @@ const TECMember = () => {
   const [sortIcon, setSortIcon] = useState(null)
   const [isSaving, setIsSaving] = useState(false)
   const [isSkillSelectModalOpen, setSkillSelectModalOpen] = useState(false)
-  
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -107,24 +106,36 @@ const TECMember = () => {
     setCurrentPage(pageNumber)
   }
 
-  const sortData = (column, order) => {
-    const sorted = [...sortedData]
-    sorted.sort((a, b) => {
-      const valueA = (a[column] || "").toString().toLowerCase() 
-      const valueB = (b[column] || "").toString().toLowerCase() 
+  const sortData = (column, order, data) => {
+    const sorted = [...data]
 
-      if (valueA < valueB) {
-        return order === "asc" ? -1 : 1
+    sorted.sort((a, b) => {
+      if (a.id < b.id) {
+        return -1
+      } else if (a.id > b.id) {
+        return 1
+      } else {
+        return 0
       }
-      if (valueA > valueB) {
-        return order === "asc" ? 1 : -1
-      }
-      return 0
     })
+
+    if (column) {
+      sorted.sort((a, b) => {
+        const valueA = (a[column] || "").toString().toLowerCase()
+        const valueB = (b[column] || "").toString().toLowerCase()
+
+        if (valueA < valueB) {
+          return order === "asc" ? -1 : 1
+        }
+        if (valueA > valueB) {
+          return order === "asc" ? 1 : -1
+        }
+        return 0
+      })
+    }
 
     setSortedData(sorted)
 
-    // Set the sorting icon based on the order
     setSortIcon(
       order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
     )
@@ -138,7 +149,7 @@ const TECMember = () => {
       setSortOrder("asc")
     }
 
-    sortData(column, sortOrder)
+    sortData(column, sortOrder === "asc" ? "desc" : "asc")
   }
 
   const fetchData = async () => {
@@ -415,6 +426,7 @@ const TECMember = () => {
       project: "",
       member: "",
       updatedon: new Date(),
+      isavailable: 0,
     }
 
     setData(prevData => [newRow, ...prevData])
@@ -431,6 +443,10 @@ const TECMember = () => {
       ...prevEditableProjects,
       [newId]: true,
     }))
+    setCurrentPage(1)
+
+    const updatedSortedData = [...sortedData, newRow]
+    sortData(sortColumn, sortOrder, updatedSortedData)
   }
 
   useEffect(() => {
@@ -514,44 +530,36 @@ const TECMember = () => {
                       <th
                         scope="col"
                         onClick={() => handleHeaderClick("member")}
-                        style={{ cursor: "pointer", userSelect: "none"  }}
+                        style={{ cursor: "pointer" }}
                       >
-                        TEC Member &nbsp;&nbsp;
+                        TEC Member{" "}
                         {sortColumn === "member" && (
-                          <i className={`${sortIcon}`}></i>
+                          <i className="material-icons">{sortIcon}</i>
                         )}
                       </th>
                       <th
                         scope="col"
                         onClick={() => handleHeaderClick("project")}
-                        style={{ cursor: "pointer", userSelect: "none"  }}
+                        style={{ cursor: "pointer" }}
                       >
-                        Project &nbsp;&nbsp;
+                        Project{" "}
                         {sortColumn === "project" && (
-                          <i className={`${sortIcon}`}></i>
+                          <i className="material-icons">{sortIcon}</i>
                         )}
                       </th>
                       <th scope="col">Core Skills</th>
                       <th scope="col">Availability</th>
                       <th
                         scope="col"
-                        style={{ cursor: "pointer", userSelect: "none"  }}
                         onClick={() => handleHeaderClick("comments")}
                       >
-                        Comments&nbsp;&nbsp;
-                        {sortColumn === "comments" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}
+                        Comments
                       </th>
                       <th
                         scope="col"
-                        style={{ cursor: "pointer", userSelect: "none"  }}
                         onClick={() => handleHeaderClick("updatedon")}
                       >
-                        Last updated&nbsp;&nbsp;
-                        {sortColumn === "updatedon" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}
+                        Last updated
                       </th>
                       <th scope="col">Activity</th>
                     </tr>
