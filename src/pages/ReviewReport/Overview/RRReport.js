@@ -18,7 +18,7 @@ import {
   Label,
 } from "reactstrap"
 import "./Components/RROverview.css"
-import { useLocation } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import classnames from "classnames"
 import { useDispatch } from "react-redux"
 
@@ -28,7 +28,7 @@ function RRReport() {
   const location = useLocation()
   const rowData = location.state
   const [activeTab, setactiveTab] = useState(1)
-  const dispatsch = useDispatch()
+  const dispatch = useDispatch()
   const [arbReview, setArbReview] = useState([])
   const [arbResponseData, setArbResponseData] = useState([])
   const [tabItems, setTabItems] = useState([])
@@ -37,13 +37,7 @@ function RRReport() {
   const [filteredPractices, setFilteredPractices] = useState([])
   const [isSaving, setIsSaving] = useState(false)
   const [selectedResponses, setSelectedResponses] = useState({})
-  // const handleResponse = (id, response) => {
-  //   setSelectedResponses(prevResponses => {
-  //     const updatedResponses = [...prevResponses]
-  //     updatedResponses[id] = response
-  //     return updatedResponses
-  //   })
-  // }
+  const navigate = useNavigate()
 
   const handleResponse = (id, response) => {
     setSelectedResponses(prevResponses => ({
@@ -115,19 +109,17 @@ function RRReport() {
     )
     setFilteredPractices(practicesForCurrentTopic)
 
-    let responses = []
-
     if (
       arbResponseData &&
       arbResponseData.response &&
       typeof arbResponseData.response === "string"
     ) {
       const responseArray = arbResponseData.response.split(",")
-      responses = responseArray.map(item => {
+      responseArray.map(item => {
         const [bestpracticeid, response] = item.split(":")
         handleResponse(bestpracticeid, response)
         selectedResponses[bestpracticeid] = response
-        console.log("selectedResponses", selectedResponses)
+        // console.log("selectedResponses", selectedResponses)
       })
     } else {
       console.error("Invalid or missing response data:", arbResponseData)
@@ -207,7 +199,7 @@ function RRReport() {
 
       const result = await response.json()
       if (result.success === true) {
-        console.log("success")
+        navigate(`/arb/${rowData.projectname}/overview`, { state: rowData })
       } else {
         console.log("error while posting or updating arb data")
       }
