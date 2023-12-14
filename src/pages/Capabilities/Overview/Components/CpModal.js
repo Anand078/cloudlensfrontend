@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import { Modal, ModalHeader, ModalBody } from "reactstrap"
-
 import {
+  Modal,
+  ModalHeader,
+  ModalBody,
   Row,
   Col,
   Card,
@@ -18,13 +19,21 @@ import {
 import * as Yup from "yup"
 import { useFormik } from "formik"
 
-const FormValidations = ({ editRowData, onCloseModal, setDataUpdated }) => {
+const FormValidations = ({ editRowData, onCloseModal }) => {
   const [isSaving, setIsSaving] = useState(false)
   const baseUrl = process.env.REACT_APP_BASE_URL
 
+  const validationSchema = Yup.object({
+    account: Yup.string().required("Please Enter Account Name"),
+    pocname: Yup.string().required("Please Enter Pilot & Exploration"),
+    assignedto: Yup.string().required("Please Enter Assigned To"),
+    technology: Yup.string().required("Please Enter Technology"),
+    owner: Yup.string().required("Please Enter Owner"),
+    objective: Yup.string().required("Please Enter Objective"),
+  })
+
   const validation = useFormik({
     enableReinitialize: true,
-
     initialValues: {
       account: editRowData?.account || "",
       teamname: editRowData?.teamname || "",
@@ -37,64 +46,47 @@ const FormValidations = ({ editRowData, onCloseModal, setDataUpdated }) => {
       remarks: editRowData?.remarks || "",
       link: editRowData?.link || "",
     },
-    validationSchema: Yup.object({
-      account: Yup.string().required("Please Enter Acount Name"),
-      pocname: Yup.string().required("Please Enter Pilor & Exploration"),
-      assignedto: Yup.string().required("Please Enter Assigned To"),
-      technology: Yup.string().required("Please Enter Technology"),
-      owner: Yup.string().required("Please Enter Owner"),
-      objective: Yup.string().required("Please Enter objective"),
-    }),
+    validationSchema,
     onSubmit: async values => {
       setIsSaving(true)
 
       try {
-        if (editRowData?.id == null || editRowData?.id == "") {
-          let response = await fetch(baseUrl + "/poc", {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-            body: JSON.stringify(values),
-          })
+        const url = editRowData?.id
+          ? `${baseUrl}/poc/${editRowData.id}`
+          : `${baseUrl}/poc`
 
-          const result = await response.json()
-          if (result.success == true) {
-            console.log("success")
-          } else {
-            console.log("error while posting arc data")
-          }
+        const response = await fetch(url, {
+          method: editRowData?.id ? "PUT" : "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(values),
+        })
+
+        const result = await response.json()
+        if (result.success) {
+          console.log(
+            editRowData?.id ? "Updated successfully" : "Saved successfully"
+          )
+
+          setDataUpdated(true)
         } else {
-          let response = await fetch(baseUrl + "/poc/" + editRowData.id, {
-            method: "PUT",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-            body: JSON.stringify(values),
-          })
-          const result = await response.json()
-          if (result.success == true) {
-            console.log("success")
-          } else {
-            console.log("error while updating arc data")
-          }
+          console.error(
+            editRowData?.id
+              ? "Error while updating data"
+              : "Error while posting data"
+          )
         }
       } catch (error) {
-        console.log("error while saving the data")
+        console.error("Error while saving the data", error)
       } finally {
         onCloseModal()
         setIsSaving(false)
-        setDataUpdated(true)
       }
     },
   })
@@ -103,12 +95,9 @@ const FormValidations = ({ editRowData, onCloseModal, setDataUpdated }) => {
     <>
       {isSaving && (
         <div className="text-center">
-          <>
-            <Spinner type="grow" className="ms-2" color="success" />
-            <Spinner type="grow" className="ms-2" color="danger" />
-            <Spinner type="grow" className="ms-2" color="warning" />
-            <Spinner type="grow" className="ms-2" color="info" />
-          </>
+          {[1, 2, 3, 4].map((_, index) => (
+            <Spinner key={index} type="grow" className="ms-2" color="success" />
+          ))}
         </div>
       )}
       <Container fluid={true}>
@@ -122,7 +111,6 @@ const FormValidations = ({ editRowData, onCloseModal, setDataUpdated }) => {
                   onSubmit={e => {
                     e.preventDefault()
                     validation.handleSubmit()
-                    return false
                   }}
                 >
                   <Row>
@@ -428,13 +416,15 @@ const FormValidations = ({ editRowData, onCloseModal, setDataUpdated }) => {
   )
 }
 
-const CapModal = ({ isOpen, toggle, editRowData, setDataUpdated }) => {
+const CapModal = ({ isOpen, toggle, editRowData }) => {
   const customModalSize = {
     maxWidth: "950px",
   }
+
   const closeAndResetModal = () => {
     toggle()
   }
+
   return (
     <div>
       <Modal
@@ -451,7 +441,6 @@ const CapModal = ({ isOpen, toggle, editRowData, setDataUpdated }) => {
           <FormValidations
             editRowData={editRowData}
             onCloseModal={closeAndResetModal}
-            setDataUpdated={setDataUpdated}
           />
         </ModalBody>
       </Modal>

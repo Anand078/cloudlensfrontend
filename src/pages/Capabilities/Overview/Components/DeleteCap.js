@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Spinner } from "reactstrap"
 
-const DeleteArc = ({ isOpen, onClose, onDelete, setDataUpdated }) => {
+const DeleteCap = ({ isOpen, onClose, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
@@ -12,9 +12,7 @@ const DeleteArc = ({ isOpen, onClose, onDelete, setDataUpdated }) => {
     } catch (error) {
       console.error("Error while deleting item", error.error)
     } finally {
-      setTimeout(100000)
       setIsDeleting(false)
-      setDataUpdated(true)
     }
   }
 
@@ -41,4 +39,4 @@ const DeleteArc = ({ isOpen, onClose, onDelete, setDataUpdated }) => {
   )
 }
 
-export default DeleteArc
+export default DeleteCap

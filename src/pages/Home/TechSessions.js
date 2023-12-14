@@ -4,9 +4,9 @@ import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
 
 const useEditableState = (data, initialValue = false) => {
-  return data.reduce((blog, item) => {
-    blog[item.id] = initialValue
-    return blog
+  return data.reduce((ts, item) => {
+    ts[item.id] = initialValue
+    return ts
   }, {})
 }
 
@@ -33,24 +33,21 @@ const EditableInput = ({
     value
   )
 
-const Blog = () => {
+const TechSessions = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
   const [editableState, setEditableState] = useState({
-    subject: useEditableState(data),
+    topics: useEditableState(data),
+    links: useEditableState(data),
   })
-
   const [isSaving, setIsSaving] = useState(false)
   const [initialData, setInitialData] = useState([])
   const inputRefs = useRef({})
   const [searchTerm, setSearchTerm] = useState("")
-  const [sortIcon, setSortIcon] = useState(null)
-  const [sortColumn, setSortColumn] = useState(null)
-  const [sortOrder, setSortOrder] = useState("asc")
-  const [sortedData, setSortedData] = useState([])
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -60,46 +57,12 @@ const Blog = () => {
     setCurrentPage(pageNumber)
   }
 
-  const sortData = (column, order) => {
-    const sorted = [...sortedData]
-    sorted.sort((a, b) => {
-      const valueA = (a[column] || "").toString().toLowerCase() // Check for undefined and use an empty string
-      const valueB = (b[column] || "").toString().toLowerCase() // Check for undefined and use an empty string
-
-      if (valueA < valueB) {
-        return order === "asc" ? -1 : 1
-      }
-      if (valueA > valueB) {
-        return order === "asc" ? 1 : -1
-      }
-      return 0
-    })
-
-    setSortedData(sorted)
-
-    // Set the sorting icon based on the order
-    setSortIcon(
-      order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
-    )
-  }
-
-  const handleHeaderClick = column => {
-    if (sortColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-    } else {
-      setSortColumn(column)
-      setSortOrder("asc")
-    }
-
-    sortData(column, sortOrder)
-  }
-
   const fetchData = async () => {
     try {
-      const [blogResp] = await Promise.all([fetch(baseUrl + "/blog")])
-      const blogData = await blogResp.json()
+      const [tsResp] = await Promise.all([fetch(baseUrl + "/techsession")])
+      const tsData = await tsResp.json()
 
-      const filteredData = blogData.data.filter(item =>
+      const filteredData = tsData.data.filter(item =>
         Object.values(item).some(value =>
           value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -107,9 +70,9 @@ const Blog = () => {
 
       setData(filteredData)
       setInitialData(filteredData)
-      setSortedData(filteredData)
       setEditableState({
-        subject: useEditableState(filteredData),
+        topics: useEditableState(filteredData),
+        links: useEditableState(filteredData),
       })
 
       setIsLoading(false)
@@ -128,20 +91,22 @@ const Blog = () => {
     const newId = generateNegativeNumber()
     const newRow = {
       id: newId,
-      subject: "",
+      topic: "",
+      link: "",
       updatedon: new Date(),
     }
 
     setData(prevData => [newRow, ...prevData])
     setEditableState(prevState => ({
       ...prevState,
-      subject: { ...prevState.subject, [newId]: true },
+      topics: { ...prevState.topics, [newId]: true },
+      links: { ...prevState.links, [newId]: true },
     }))
   }
 
   useEffect(() => {
     fetchData()
-  }, [searchTerm]) // Update useEffect to include searchTerm
+  }, [searchTerm])
 
   useEffect(() => {
     const handleClick = event => {
@@ -166,19 +131,28 @@ const Blog = () => {
     }))
   }
 
-  const handleSubjectChange = (id, event) => {
+  const handleTopicsChange = (id, event) => {
     const updatedData = data.map(item =>
       item.id === id
-        ? { ...item, subject: event.target.value, updatedon: new Date() }
+        ? { ...item, topic: event.target.value, updatedon: new Date() }
         : item
     )
     setData(updatedData)
   }
 
+  const handleLinksChange = (id, event) => {
+    const updatedData = data.map(item =>
+      item.id === id
+        ? { ...item, link: event.target.value, updatedon: new Date() }
+        : item
+    )
+    setData(updatedData)
+  }
   const handleBlur = id => {
     setEditableState(prevState => ({
       ...prevState,
-      subject: { ...prevState.subject, [id]: false },
+      topics: { ...prevState.topics, [id]: false },
+      links: { ...prevState.links, [id]: false },
     }))
   }
 
@@ -190,14 +164,6 @@ const Blog = () => {
     setSearchTerm(event.target.value)
   }
 
-  const handleReloadClick = async () => {
-    setIsLoading(true)
-    try {
-      await fetchData()
-    } finally {
-      setIsLoading(false)
-    }
-  }
   const handleSave = async () => {
     try {
       setIsSaving(true)
@@ -228,7 +194,7 @@ const Blog = () => {
   const saveData = async modifiedData => {
     debugger
     try {
-      const response = await fetch(baseUrl + "/blog", {
+      const response = await fetch(baseUrl + "/techsession", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -249,7 +215,14 @@ const Blog = () => {
       console.error("Error saving data:", error)
     }
   }
-
+  const handleReloadClick = async () => {
+    setIsLoading(true)
+    try {
+      await fetchData()
+    } finally {
+      setIsLoading(false)
+    }
+  }
   const formatDate = dateString => {
     const options = {
       year: "numeric",
@@ -260,7 +233,6 @@ const Blog = () => {
     }
     return new Date(dateString).toLocaleString(undefined, options)
   }
-
   return (
     <>
       {isLoading ? (
@@ -314,60 +286,87 @@ const Blog = () => {
                     <tr>
                       <th
                         style={{
-                          width: "20%",
-                          cursor: "pointer",
-                          userSelect: "none",
+                          width: "25%",
                         }}
                         scope="col"
-                        onClick={() => handleHeaderClick("updatedon")}
                       >
-                        Date &nbsp;&nbsp;
-                        {sortColumn === "updatedon" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}
+                        Date
                       </th>
                       <th
                         style={{
-                          width: "80%",
-                          cursor: "pointer",
-                          userSelect: "none" 
+                          width: "50%",
                         }}
                         scope="col"
-                        onClick={() => handleHeaderClick("subject")}
                       >
-                        Subject &nbsp;&nbsp;
-                        {sortColumn === "subject" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}
+                        Topic
+                      </th>
+                      <th
+                        style={{
+                          width: "20%",
+                        }}
+                        scope="col"
+                      >
+                        Recording Link
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedData.map(item => (
+                    {currentData.map(item => (
                       <tr key={item.id}>
-                        <td className="text-left">
+                        <td
+                          className="text-left"
+                          style={{
+                            width: "20%",
+                          }}
+                        >
                           {formatDate(item.updatedon)}
                         </td>
                         <td
                           onDoubleClick={() =>
-                            handleEditToggle("subject", item.id)
+                            handleEditToggle("topics", item.id)
                           }
                           style={{
-                            width: "80%",
+                            width: "60%",
                             whiteSpace: "pre-line",
                           }}
                         >
-                          {editableState.subject[item.id] ? (
+                          {editableState.topics[item.id] ? (
                             <EditableInput
                               id={item.id}
-                              value={item.subject}
-                              editable={editableState.subject[item.id]}
-                              onChange={e => handleSubjectChange(item.id, e)}
+                              value={item.topic}
+                              editable={editableState.topics[item.id]}
+                              onChange={e => handleTopicsChange(item.id, e)}
                               onBlur={() => handleBlur(item.id)}
                               inputRef={ref => handleInputRef(item.id, ref)}
                             />
                           ) : (
-                            item.subject
+                            item.topic
+                          )}
+                        </td>
+                        <td
+                          onDoubleClick={() =>
+                            handleEditToggle("links", item.id)
+                          }
+                          style={{
+                            width: "20%",
+                            whiteSpace: "nowrap", // Add this style to prevent line breaks
+                            overflow: "hidden", // Add this style to handle overflow
+                            textOverflow: "ellipsis", // Add this style to show an ellipsis for overflow
+                          }}
+                        >
+                          {editableState.links[item.id] ? (
+                            <EditableInput
+                              id={item.id}
+                              value={item.link}
+                              editable={editableState.links[item.id]}
+                              onChange={e => handleLinksChange(item.id, e)}
+                              onBlur={() => handleBlur(item.id)}
+                              inputRef={ref => handleInputRef(item.id, ref)}
+                            />
+                          ) : (
+                            <a href={`${item.link}`} target="_blank">
+                              Link
+                            </a>
                           )}
                         </td>
                       </tr>
@@ -396,4 +395,4 @@ const Blog = () => {
   )
 }
 
-export default Blog
+export default TechSessions

@@ -1,6 +1,6 @@
 import React from "react"
 
-import Dashboard from "../pages/Dashboard/index"
+import Dashboard from "../pages/Home/index"
 // Charts
 import ChartApex from "../pages/Charts/Apexcharts"
 import ChartistChart from "../pages/Charts/ChartistChart"
@@ -57,19 +57,19 @@ import PagesFaqs from "../pages/Utility/pages-faqs"
 import PagesDirectory from "../pages/Utility/PagesDirectory"
 //-----------------our routes----------------------------
 import CapOverview from "pages/Capabilities/Overview"
-import ArbOverview from "pages/Architecture/Overview"
+import ArbOverview from "pages/ARB/Overview"
 import AccOverview from "pages/Accelerator/Overview"
 import ReviewOverview from "pages/ReviewOverview/Overview"
 import ReviewReport from "pages/ReviewReport/Overview"
 const userRoutes = [
   //-----------------our routes----------------------------
-  //Dashboard
+  //Home
   { path: "/dashboard", component: <Dashboard /> },
   //Capabilities
   { path: "cap/overview", component: <CapOverview /> },
   //Accelerator
   { path: "accelerator/overview", component: <AccOverview /> },
-  //Architecture Review
+  //ARB
   { path: "arb/overview", component: <ArbOverview /> },
   //Review Overview
   { path: "arb/:projectname/overview", component: <ReviewOverview /> },

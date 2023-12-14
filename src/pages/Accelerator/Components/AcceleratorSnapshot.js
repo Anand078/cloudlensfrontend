@@ -52,10 +52,6 @@ const AccSnap = () => {
   const [initialData, setInitialData] = useState([])
   const inputRefs = useRef({})
   const [searchTerm, setSearchTerm] = useState("") // Step 1
-  const [sortIcon, setSortIcon] = useState(null)
-  const [sortColumn, setSortColumn] = useState(null)
-  const [sortOrder, setSortOrder] = useState("asc")
-  const [sortedData, setSortedData] = useState([])
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -69,39 +65,6 @@ const AccSnap = () => {
     setActivityModalOpen(!isActivityModalOpen)
     setSelectedAcceleratorId(accid)
     setSelectedAccName(accname)
-  }
-
-  const sortData = (column, order) => {
-    const sorted = [...sortedData]
-    sorted.sort((a, b) => {
-      const valueA = (a[column] || "").toString().toLowerCase()
-      const valueB = (b[column] || "").toString().toLowerCase()
-
-      if (valueA < valueB) {
-        return order === "asc" ? -1 : 1
-      }
-      if (valueA > valueB) {
-        return order === "asc" ? 1 : -1
-      }
-      return 0
-    })
-
-    setSortedData(sorted)
-
-    setSortIcon(
-      order === "asc" ? "ion ion-md-arrow-dropup" : "ion ion-md-arrow-dropdown"
-    )
-  }
-
-  const handleHeaderClick = column => {
-    if (sortColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-    } else {
-      setSortColumn(column)
-      setSortOrder("asc")
-    }
-
-    sortData(column, sortOrder)
   }
 
   const handlePageChange = pageNumber => {
@@ -121,7 +84,6 @@ const AccSnap = () => {
 
       setData(filteredData)
       setInitialData(filteredData)
-      setSortedData(filteredData)
 
       setEditableState({
         accNames: useEditableState(filteredData),
@@ -142,6 +104,15 @@ const AccSnap = () => {
     const randomNumber = Math.floor(Math.random() * Math.pow(10, 6))
     const negativeNumber = -1 * randomNumber
     return negativeNumber
+  }
+
+  const handleReloadClick = async () => {
+    setIsLoading(true)
+    try {
+      await fetchData()
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleAddRow = () => {
@@ -393,6 +364,9 @@ const AccSnap = () => {
                   <i className="ion ion-md-save"></i>
                 )}
               </Button>
+              <Button color="primary" onClick={handleReloadClick}>
+                <i className="mdi mdi-reload"></i>
+              </Button>
             </Col>
           </Row>
           <Row>
@@ -404,75 +378,18 @@ const AccSnap = () => {
                 >
                   <thead>
                     <tr>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("accname")}>Accelerators & Initiatives Name
-                         &nbsp;&nbsp;
-                        {sortColumn === "accname" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("version")}>Version &nbsp;&nbsp;
-                        {sortColumn === "version" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("indicativetimeline")}>Indicative Timeline &nbsp;&nbsp;
-                        {sortColumn === "indicativetimeline" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("resourcerequirement")}>Resource Requirement &nbsp;&nbsp;
-                        {sortColumn === "resourcerequirement" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("blocker")}>Blocker &nbsp;&nbsp;
-                        {sortColumn === "blocker" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("comments")}>Comments &nbsp;&nbsp;
-                        {sortColumn === "comments" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
-                      <th style={{
-                          cursor: "pointer",
-                          userSelect: "none",
-                        }}
-                        scope="col"
-                        onClick={() => handleHeaderClick("updatedon")}>Last Updated &nbsp;&nbsp;
-                        {sortColumn === "updatedon" && (
-                          <i className={`${sortIcon}`}></i>
-                        )}</th>
+                      <th scope="col">Accelerators & Initiatives Name</th>
+                      <th scope="col">Version</th>
+                      <th scope="col">Indicative Timeline</th>
+                      <th scope="col">Resource Requirement</th>
+                      <th scope="col">Blocker</th>
+                      <th scope="col">Comments</th>
+                      <th scope="col">Last Updated</th>
                       <th scope="col">Activity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedData.map(item => (
+                    {currentData.map(item => (
                       <tr key={item.id}>
                         <td
                           className="text-left"

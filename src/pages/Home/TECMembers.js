@@ -66,23 +66,42 @@ const TECMember = () => {
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
 
-  const filteredData = data.filter(item => {
-    const member = item.member ? item.member.toLowerCase() : ""
-    const project = item.project ? item.project.toLowerCase() : ""
-    const comments = item.comments ? item.comments.toLowerCase() : ""
+  useEffect(() => {
+    const filteredData = initialData.filter(item => {
+      const member = item.member ? item.member.toLowerCase() : ""
+      const project = item.project ? item.project.toLowerCase() : ""
+      const comments = item.comments ? item.comments.toLowerCase() : ""
 
-    return (
-      member.includes(searchTerm.toLowerCase()) ||
-      project.includes(searchTerm.toLowerCase()) ||
-      comments.includes(searchTerm.toLowerCase())
-    )
-  })
+      return (
+        member.includes(searchTerm.toLowerCase()) ||
+        project.includes(searchTerm.toLowerCase()) ||
+        comments.includes(searchTerm.toLowerCase())
+      )
+    })
+
+    setData(filteredData)
+  }, [searchTerm, initialData])
+
+  const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
 
   const handleSearchChange = event => {
-    setSearchTerm(event.target.value)
-  }
+    const searchTerm = event.target.value
+    setSearchTerm(searchTerm)
+    const filteredData = initialData.filter(item => {
+      const member = item.member ? item.member.toLowerCase() : ""
+      const project = item.project ? item.project.toLowerCase() : ""
+      const comments = item.comments ? item.comments.toLowerCase() : ""
 
-  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem)
+      return (
+        member.includes(searchTerm.toLowerCase()) ||
+        project.includes(searchTerm.toLowerCase()) ||
+        comments.includes(searchTerm.toLowerCase())
+      )
+    })
+
+    setData(filteredData)
+    setCurrentPage(1)
+  }
 
   const [isTimelineModalOpen, setTimelineModalOpen] = useState(false)
   const [isCoreSkillModalOpen, setCoreSkillModalOpen] = useState(false)
