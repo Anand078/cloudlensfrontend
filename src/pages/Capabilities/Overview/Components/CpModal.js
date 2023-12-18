@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Modal,
   ModalHeader,
@@ -15,9 +15,9 @@ import {
   Form,
   FormFeedback,
   Spinner,
-} from "reactstrap";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+} from "reactstrap"
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 const generateFormFields = (fields, validation) =>
   fields.map(({ name, label, placeholder, type }) => (
@@ -27,12 +27,12 @@ const generateFormFields = (fields, validation) =>
         <Input
           name={name}
           placeholder={placeholder}
-          type={type || 'text'}
+          type={type || "text"}
           className="form-control"
           id={`validationCustom${name}`}
           onChange={validation.handleChange}
           onBlur={validation.handleBlur}
-          value={validation.values[name] || ''}
+          value={validation.values[name] || ""}
           invalid={validation.touched[name] && validation.errors[name]}
         />
         {validation.touched[name] && validation.errors[name] && (
@@ -40,11 +40,12 @@ const generateFormFields = (fields, validation) =>
         )}
       </FormGroup>
     </Col>
-  ));
+  ))
 
 const FormValidations = ({ editRowData, onCloseModal }) => {
-  const [isSaving, setIsSaving] = useState(false);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [isSaving, setIsSaving] = useState(false)
+  const baseUrl = process.env.REACT_APP_BASE_URL
+  const [dataUpdated, setDataUpdated] = useState(false)
 
   const validationSchema = Yup.object({
     account: Yup.string().required("Please Enter Account Name"),
@@ -53,7 +54,7 @@ const FormValidations = ({ editRowData, onCloseModal }) => {
     technology: Yup.string().required("Please Enter Technology"),
     owner: Yup.string().required("Please Enter Owner"),
     objective: Yup.string().required("Please Enter Objective"),
-  });
+  })
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -70,40 +71,48 @@ const FormValidations = ({ editRowData, onCloseModal }) => {
       link: editRowData?.link || "",
     },
     validationSchema,
-    onSubmit: async (values) => {
-      setIsSaving(true);
-
+    onSubmit: async values => {
+      setIsSaving(true)
+      debugger
       try {
         const url = editRowData?.id
           ? `${baseUrl}/poc/${editRowData.id}`
-          : `${baseUrl}/poc`;
+          : `${baseUrl}/poc`
 
         const response = await fetch(url, {
           method: editRowData?.id ? "PUT" : "POST",
-          // ... other fetch options ...
-        });
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(values),
+        })
 
-        const result = await response.json();
+        const result = await response.json()
         if (result.success) {
           console.log(
             editRowData?.id ? "Updated successfully" : "Saved successfully"
-          );
-          setDataUpdated(true);
+          )
+          setDataUpdated(true)
         } else {
           console.error(
             editRowData?.id
               ? "Error while updating data"
               : "Error while posting data"
-          );
+          )
         }
       } catch (error) {
-        console.error("Error while saving the data", error);
+        console.error("Error while saving the data", error)
       } finally {
-        onCloseModal();
-        setIsSaving(false);
+        onCloseModal()
+        setIsSaving(false)
       }
     },
-  });
+  })
 
   const formFields = generateFormFields(
     [
@@ -119,7 +128,7 @@ const FormValidations = ({ editRowData, onCloseModal }) => {
       { name: "remarks", label: "Remarks" },
     ],
     validation
-  );
+  )
 
   return (
     <>
@@ -136,9 +145,9 @@ const FormValidations = ({ editRowData, onCloseModal }) => {
                 <p className="card-title-desc"></p>
                 <Form
                   className="row g-3 needs-validation"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    validation.handleSubmit();
+                  onSubmit={e => {
+                    e.preventDefault()
+                    validation.handleSubmit()
                   }}
                 >
                   <Row>{formFields}</Row>
@@ -163,17 +172,17 @@ const FormValidations = ({ editRowData, onCloseModal }) => {
         </Row>
       </Container>
     </>
-  );
-};
+  )
+}
 
 const CapModal = ({ isOpen, toggle, editRowData }) => {
   const customModalSize = {
     maxWidth: "950px",
-  };
+  }
 
   const closeAndResetModal = () => {
-    toggle();
-  };
+    toggle()
+  }
 
   return (
     <div>
@@ -195,7 +204,7 @@ const CapModal = ({ isOpen, toggle, editRowData }) => {
         </ModalBody>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default CapModal;
+export default CapModal

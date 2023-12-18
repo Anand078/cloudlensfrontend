@@ -46,6 +46,12 @@ function RRReport() {
     }))
   }
 
+  const isAllNAResponses = () => {
+    return filteredPractices.every(
+      bestPractice => selectedResponses[bestPractice.bestpracticeid] === "NA"
+    )
+  }
+
   function toggleTab(tab) {
     if (activeTab !== tab && tab >= 1 && tab <= tabItems.length) {
       setCurrentTopicIndex(0)
@@ -327,6 +333,7 @@ function RRReport() {
                                 name="checkbox"
                                 type="checkbox"
                                 onChange={handleCheckboxChange}
+                                // checked={isAllNAResponses()}
                               />
                               <Label check for="exampleCheckbox">
                                 Not Applicable

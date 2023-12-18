@@ -9,6 +9,7 @@ const CapList = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [initialData, setInitialData] = useState([])
   const [itemsPerPage] = useState(10)
   const [editRowData, setEditRowData] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -78,6 +79,7 @@ const CapList = () => {
           value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
       )
+      
       setData(filteredData)
       setInitialData(filteredData)
     } catch (error) {
