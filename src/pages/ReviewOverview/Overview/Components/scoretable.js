@@ -1,100 +1,137 @@
 import React from "react"
 import { Table } from "reactstrap" // Assuming you are using Reactstrap for styling
 
-const ScoreTable = ({ arbScoreData }) => {
+const ScoreTable = () => {
+  const data = [
+    {
+      Scope: "Cost Optimization",
+      Topics: 11,
+      "Best Practices": 49,
+      Compliant: 12,
+      "Non Compliant": 35,
+      "Not Applicable": 2,
+      Score: "26%",
+      Status: "Critical Score",
+    },
+    {
+      Scope: "Security",
+      Topics: 11,
+      "Best Practices": 65,
+      Compliant: 18,
+      "Non Compliant": 40,
+      "Not Applicable": 7,
+      Score: "31%",
+      Status: "Low Score",
+    },
+    {
+      Scope: "Operations",
+      Topics: 11,
+      "Best Practices": 83,
+      Compliant: 17,
+      "Non Compliant": 45,
+      "Not Applicable": 21,
+      Score: "27%",
+      Status: "Critical Score",
+    },
+    {
+      Scope: "Reliability",
+      Topics: 13,
+      "Best Practices": 67,
+      Compliant: 37,
+      "Non Compliant": 22,
+      "Not Applicable": 8,
+      Score: "63%",
+      Status: "Medium Score",
+    },
+    {
+      Scope: "Sustainability",
+      Topics: 6,
+      "Best Practices": 28,
+      Compliant: 8,
+      "Non Compliant": 10,
+      "Not Applicable": 10,
+      Score: "44%",
+      Status: "Low Score",
+    },
+    {
+      Scope: "Performance",
+      Topics: 8,
+      "Best Practices": 42,
+      Compliant: 17,
+      "Non Compliant": 18,
+      "Not Applicable": 7,
+      Score: "49%",
+      Status: "Low Score",
+    },
+  ]
   const totals = {
     Scope: "Overall",
-    Topics: 0,
-    "Best Practices": 0,
-    Compliant: 0,
-    "Non Compliant": 0,
-    "Not Applicable": 0,
-    Score: 0,
-    Status: "",
+    Topics: data.reduce((sum, row) => sum + row.Topics, 0),
+    "Best Practices": data.reduce((sum, row) => sum + row["Best Practices"], 0),
+    Compliant: data.reduce((sum, row) => sum + row.Compliant, 0),
+    "Non Compliant": data.reduce((sum, row) => sum + row["Non Compliant"], 0),
+    "Not Applicable": data.reduce((sum, row) => sum + row["Not Applicable"], 0),
+    Score: "39%", // You can leave Score and Status empty for totals
+    Status: "Critical Score",
   }
-
-  arbScoreData.forEach(row => {
-    totals.Topics += row.topics || 0
-    totals["Best Practices"] += row.bestpractices || 0
-    totals.Compliant += row.compliant || 0
-    totals["Non Compliant"] += row.noncompliant || 0
-    totals["Not Applicable"] += row.notapplicable || 0
-  })
-
-  totals.Score = Math.round(
-    ((totals.Compliant || 0) /
-      (totals["Best Practices"] - totals["Not Applicable"])) *
-      100 || 0
-  )
-
-  if (totals.Score <= 30) {
-    totals.Status = "Critical Score"
-  } else if (totals.Score < 50) {
-    totals.Status = "Low Score"
-  } else if (totals.Score < 70) {
-    totals.Status = "Medium Score"
-  } else {
-    totals.Status = "Compliant"
-  }
-
   return (
     <div className="table-responsive">
       <Table className="table mb-0">
         <thead className="table-light">
           <tr>
-            <th>Pillar</th>
-            <th>Topics</th>
-            <th>Best Practices</th>
-            <th>Compliant</th>
-            <th>Non Compliant</th>
-            <th>Not Applicable</th>
-            <th>Score</th>
-            <th>Status</th>
+            <th className="text-center">Pillar</th>
+            <th className="text-center">Topics</th>
+            <th className="text-center">Best Practices</th>
+            <th className="text-center">Compliant</th>
+            <th className="text-center">Non Compliant</th>
+            <th className="text-center">Not Applicable</th>
+            <th className="text-center">Score</th>
+            <th className="text-center">Status</th>
           </tr>
         </thead>
         <tbody>
-          {arbScoreData.map((row, index) => (
+          {data.map((row, index) => (
             <tr key={index}>
-              <td>{row.pillarname}</td>
-              <td>{row.topics}</td>
-              <td>{row.bestpractices}</td>
-              <td>{row.compliant}</td>
-              <td>{row.noncompliant}</td>
-              <td>{row.notapplicable}</td>
-              <td>{row.score}</td>
-              <td>{row.status}</td>
+              <td className="text-center">{row.Scope}</td>
+              <td className="text-center">{row.Topics}</td>
+              <td className="text-center">{row["Best Practices"]}</td>
+              <td className="text-center">{row.Compliant}</td>
+              <td className="text-center">{row["Non Compliant"]}</td>
+              <td className="text-center">{row["Not Applicable"]}</td>
+              <td className="text-center">{row.Score}</td>
+              <td className="text-center">{row.Status}</td>
             </tr>
           ))}
           <tr>
-            <td>
+            <td className="text-center">
               <strong>{totals.Scope}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals.Topics}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals["Best Practices"]}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals.Compliant}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals["Non Compliant"]}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals["Not Applicable"]}</strong>
             </td>
-            <td>
-              <strong>{totals.Score}%</strong>
+            <td className="text-center">
+              <strong>{totals.Score}</strong>
             </td>
-            <td>
+            <td className="text-center">
               <strong>{totals.Status}</strong>
             </td>
           </tr>
         </tbody>
       </Table>
     </div>
-  )
-}
+  );
+};
 
-export default ScoreTable
+export default ScoreTable;
