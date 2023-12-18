@@ -3,26 +3,39 @@ import { Table } from "reactstrap" // Assuming you are using Reactstrap for styl
 
 const ScoreTable = ({ arbScoreData }) => {
   const totals = {
-    Scope: "Total",
-    Topics: arbScoreData.reduce((sum, row) => sum + (row.topics || 0), 0),
-    "Best Practices": arbScoreData.reduce(
-      (sum, row) => sum + (row.bestpractices || 0),
-      0
-    ),
-    Compliant: arbScoreData.reduce((sum, row) => sum + (row.compliant || 0), 0),
-    "Non Compliant": arbScoreData.reduce(
-      (sum, row) => sum + (row.noncompliant || 0),
-      0
-    ),
-    "Not Applicable": arbScoreData.reduce(
-      (sum, row) => sum + (row.notapplicable || 0),
-      0
-    ),
-    Score: "39%", //hard-coded
-    Status: "Critical Score", //hard coded
+    Scope: "Overall",
+    Topics: 0,
+    "Best Practices": 0,
+    Compliant: 0,
+    "Non Compliant": 0,
+    "Not Applicable": 0,
+    Score: 0,
+    Status: "",
   }
 
-  console.log("anand", arbScoreData)
+  arbScoreData.forEach(row => {
+    totals.Topics += row.topics || 0
+    totals["Best Practices"] += row.bestpractices || 0
+    totals.Compliant += row.compliant || 0
+    totals["Non Compliant"] += row.noncompliant || 0
+    totals["Not Applicable"] += row.notapplicable || 0
+  })
+
+  totals.Score = Math.round(
+    ((totals.Compliant || 0) /
+      (totals["Best Practices"] - totals["Not Applicable"])) *
+      100 || 0
+  )
+
+  if (totals.Score <= 30) {
+    totals.Status = "Critical Score"
+  } else if (totals.Score < 50) {
+    totals.Status = "Low Score"
+  } else if (totals.Score < 70) {
+    totals.Status = "Medium Score"
+  } else {
+    totals.Status = "Compliant"
+  }
 
   return (
     <div className="table-responsive">
@@ -72,7 +85,7 @@ const ScoreTable = ({ arbScoreData }) => {
               <strong>{totals["Not Applicable"]}</strong>
             </td>
             <td>
-              <strong>{totals.Score}</strong>
+              <strong>{totals.Score}%</strong>
             </td>
             <td>
               <strong>{totals.Status}</strong>
