@@ -8,8 +8,8 @@ const CapList = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
   const [initialData, setInitialData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
   const [editRowData, setEditRowData] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -24,6 +24,7 @@ const CapList = () => {
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
+    fetchData()
   }
 
   const closeDeleteModal = () => {
@@ -79,7 +80,6 @@ const CapList = () => {
           value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
       )
-      
       setData(filteredData)
       setInitialData(filteredData)
     } catch (error) {
@@ -93,8 +93,28 @@ const CapList = () => {
     fetchData()
   }, [dataUpdated])
 
+  useEffect(() => {
+    const filteredData = initialData.filter(item =>
+      Object.values(item).some(
+        value => value && value.toString().toLowerCase().includes(searchTerm)
+      )
+    )
+
+    setData(filteredData)
+  }, [searchTerm, initialData])
+
   const handleSearchChange = event => {
-    setSearchTerm(event.target.value)
+    const searchTerm = event.target.value.toLowerCase()
+
+    const filteredData = initialData.filter(item =>
+      Object.values(item).some(
+        value => value && value.toString().toLowerCase().includes(searchTerm)
+      )
+    )
+
+    setData(filteredData)
+    setSearchTerm(searchTerm)
+    setCurrentPage(1)
   }
 
   const openDeleteModal = rowData => {
