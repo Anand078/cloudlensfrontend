@@ -1,7 +1,7 @@
 import React from "react"
 import { Container, Row, Col } from "reactstrap"
-
 import RROverview from "./RROverview"
+import Breadcrumb from "components/Common/Breadcrumb"
 
 const RROverviewIndex = id => {
   document.title = " Cloud-Lens | Review Report"
@@ -9,6 +9,12 @@ const RROverviewIndex = id => {
     <React.Fragment>
       <div className="page-content custom-scrollbar">
         <Container fluid>
+          <Breadcrumb
+            maintitle="Dashboard"
+            title="Architecture Review"
+            breadcrumbItem="Review Overview"
+            path="/arb/overview"
+          />
           <Row>
             <Col
               xs="12"

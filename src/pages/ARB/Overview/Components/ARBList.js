@@ -202,7 +202,7 @@ const ARBList = () => {
                                 aria-hidden="true"
                               />
                             </DropdownToggle>
-                            <DropdownMenu>
+                            <DropdownMenu sx={{ zIndex: "10" }}>
                               <DropdownItem
                                 onClick={() => {
                                   setEditRowData(item)
@@ -210,7 +210,7 @@ const ARBList = () => {
                                 }}
                               >
                                 <i
-                                  class="typcn typcn-edit"
+                                  className="typcn typcn-edit"
                                   style={{
                                     fontSize: "1.3rem",
                                   }}
@@ -221,7 +221,7 @@ const ARBList = () => {
                                 onClick={() => openDeleteModal(item)}
                               >
                                 <i
-                                  class="mdi mdi-delete"
+                                  className="mdi mdi-delete"
                                   style={{
                                     fontSize: "1.3rem",
                                   }}

@@ -31,6 +31,8 @@ const CapList = () => {
   }
 
   const toggleModal = async (rowData, getDataCallback = null) => {
+    setEditRowData(rowData)
+    setIsModalOpen(prev => !prev)
     if (getDataCallback) {
       getDataCallback()
     }
@@ -38,9 +40,6 @@ const CapList = () => {
     if (getDataCallback !== null) {
       await fetchData()
     }
-
-    setEditRowData(rowData)
-    setIsModalOpen(prev => !prev)
   }
 
   const handleDelete = async () => {

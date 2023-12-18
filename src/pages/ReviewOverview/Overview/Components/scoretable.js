@@ -1,79 +1,29 @@
 import React from "react"
 import { Table } from "reactstrap" // Assuming you are using Reactstrap for styling
 
-const ScoreTable = () => {
-  const data = [
-    {
-      Scope: "Cost Optimization",
-      Topics: 11,
-      "Best Practices": 49,
-      Compliant: 12,
-      "Non Compliant": 35,
-      "Not Applicable": 2,
-      Score: "26%",
-      Status: "Critical Score",
-    },
-    {
-      Scope: "Security",
-      Topics: 11,
-      "Best Practices": 65,
-      Compliant: 18,
-      "Non Compliant": 40,
-      "Not Applicable": 7,
-      Score: "31%",
-      Status: "Low Score",
-    },
-    {
-      Scope: "Operations",
-      Topics: 11,
-      "Best Practices": 83,
-      Compliant: 17,
-      "Non Compliant": 45,
-      "Not Applicable": 21,
-      Score: "27%",
-      Status: "Critical Score",
-    },
-    {
-      Scope: "Reliability",
-      Topics: 13,
-      "Best Practices": 67,
-      Compliant: 37,
-      "Non Compliant": 22,
-      "Not Applicable": 8,
-      Score: "63%",
-      Status: "Medium Score",
-    },
-    {
-      Scope: "Sustainability",
-      Topics: 6,
-      "Best Practices": 28,
-      Compliant: 8,
-      "Non Compliant": 10,
-      "Not Applicable": 10,
-      Score: "44%",
-      Status: "Low Score",
-    },
-    {
-      Scope: "Performance",
-      Topics: 8,
-      "Best Practices": 42,
-      Compliant: 17,
-      "Non Compliant": 18,
-      "Not Applicable": 7,
-      Score: "49%",
-      Status: "Low Score",
-    },
-  ]
+const ScoreTable = ({ arbScoreData }) => {
   const totals = {
     Scope: "Total",
-    Topics: data.reduce((sum, row) => sum + row.Topics, 0),
-    "Best Practices": data.reduce((sum, row) => sum + row["Best Practices"], 0),
-    Compliant: data.reduce((sum, row) => sum + row.Compliant, 0),
-    "Non Compliant": data.reduce((sum, row) => sum + row["Non Compliant"], 0),
-    "Not Applicable": data.reduce((sum, row) => sum + row["Not Applicable"], 0),
-    Score: "39%", // You can leave Score and Status empty for totals
-    Status: "Critical Score",
+    Topics: arbScoreData.reduce((sum, row) => sum + (row.topics || 0), 0),
+    "Best Practices": arbScoreData.reduce(
+      (sum, row) => sum + (row.bestpractices || 0),
+      0
+    ),
+    Compliant: arbScoreData.reduce((sum, row) => sum + (row.compliant || 0), 0),
+    "Non Compliant": arbScoreData.reduce(
+      (sum, row) => sum + (row.noncompliant || 0),
+      0
+    ),
+    "Not Applicable": arbScoreData.reduce(
+      (sum, row) => sum + (row.notapplicable || 0),
+      0
+    ),
+    Score: "39%", //hard-coded
+    Status: "Critical Score", //hard coded
   }
+
+  console.log("anand", arbScoreData)
+
   return (
     <div className="table-responsive">
       <Table className="table mb-0">
@@ -90,16 +40,16 @@ const ScoreTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {arbScoreData.map((row, index) => (
             <tr key={index}>
-              <td>{row.Scope}</td>
-              <td>{row.Topics}</td>
-              <td>{row["Best Practices"]}</td>
-              <td>{row.Compliant}</td>
-              <td>{row["Non Compliant"]}</td>
-              <td>{row["Not Applicable"]}</td>
-              <td>{row.Score}</td>
-              <td>{row.Status}</td>
+              <td>{row.pillarname}</td>
+              <td>{row.topics}</td>
+              <td>{row.bestpractices}</td>
+              <td>{row.compliant}</td>
+              <td>{row.noncompliant}</td>
+              <td>{row.notapplicable}</td>
+              <td>{row.score}</td>
+              <td>{row.status}</td>
             </tr>
           ))}
           <tr>

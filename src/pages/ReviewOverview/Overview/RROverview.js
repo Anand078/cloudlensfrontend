@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   CardBody,
   Card,
@@ -19,23 +19,34 @@ import StackedChart from "./Components/stackedchart"
 import ScoreTable from "./Components/scoretable"
 import ARBDetails from "./Components/teammembers"
 import ProjectDetails from "./Components/projectmembers"
+import revImg from "../../../assets/images/revimg.png"
 function RROverview() {
   const [isLoading, setIsLoading] = useState(true)
   const location = useLocation()
   const rowData = location.state
   const navigate = useNavigate()
   const baseUrl = process.env.REACT_APP_BASE_URL
+  const [arbScoreData, setArbScoreData] = useState([])
   const handleReviewPage = row => {
     navigate(`/arb/${row.projectname}/review`, { state: row })
   }
-  const data = [
-    { id: 1, pillar: "Cost Optimization", text: "PENDING" },
-    { id: 2, pillar: "Security", text: "PENDING" },
-    { id: 3, pillar: "Operational Excellence", text: "PENDING" },
-    { id: 4, pillar: "Reliability", text: "PENDING" },
-    { id: 5, pillar: "Sustainability", text: "PENDING" },
-    { id: 6, pillar: "Performance Efficiency", text: "PENDING" },
-  ]
+
+  const fetchData = async () => {
+    try {
+      const [tsResp] = await Promise.all([
+        fetch(baseUrl + "/arbscore/" + rowData.id),
+      ])
+      const tsData = await tsResp.json()
+      setArbScoreData(tsData.data)
+      setIsLoading(false)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
   return (
     <>
       {false ? (
@@ -47,84 +58,6 @@ function RROverview() {
         </div>
       ) : (
         <Container fluid style={{ marginTop: "30px" }}>
-          {/* <Row
-            className="col-12"
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "0.05rem",
-              padding: "0",
-              margin: "0 auto",
-            }}
-          >
-            <div
-              className=" d-flex py-2 m-0 "
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "0.4rem",
-              }}
-            >
-              {data.map(item => {
-                return (
-                  <div
-                    key={item.id}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "0.3rem",
-                      padding: 0,
-                      margin: 0,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "90px",
-                        height: "100px",
-                        borderRadius: "10px",
-                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                      }}
-                      className="p-1 m-0 bg-white"
-                    >
-                      <div className="d-flex flex-column align-items-center justify-content-center">
-                        <p>{item.id}</p>
-                        <span
-                          style={{
-                            fontSize: "10px",
-                            fontWeight: "500",
-                            alignSelf: "center",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          {item.pillar}
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        width: "68px",
-                        height: "20px",
-                        borderRadius: "15px",
-                        background: "grey",
-                        textAlign: "center",
-                        alignSelf: "center",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        display: "flex",
-                        fontSize: "10px",
-                        color: "#fff",
-                      }}
-                    >
-                      {item.text}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </Row> */}
           <Row>
             <Col lg={12}>
               <Card>
@@ -148,15 +81,29 @@ function RROverview() {
                         for the platform architecture.
                       </p>
                     </div>
-                    <div className="ml-auto">
+                    <div
+                      style={{
+                        position: "relative",
+                        marginRight: "-720px",
+                        marginTop: "-50px",
+                      }}
+                    >
                       <Button
                         color="primary"
-                        className="btn btn-primary waves-effect waves-light"
+                        className="btn btn-primary waves-effect waves-light position-absolute top-0"
                         onClick={() => handleReviewPage(rowData)}
-                        style={{ marginTop: "-75px" }}
                       >
                         Review
                       </Button>
+                    </div>
+                    <div
+                      style={{
+                        marginRight: "150px",
+                      }}
+                    >
+                      <span className="logo-lg">
+                        <img src={revImg} alt="" height="150px" />
+                      </span>
                     </div>
                   </div>
                 </CardBody>
@@ -222,7 +169,7 @@ function RROverview() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <ScoreTable />
+                  <ScoreTable arbScoreData={arbScoreData} />
                 </CardBody>
               </Card>
             </Col>
