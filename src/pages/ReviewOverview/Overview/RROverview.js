@@ -83,19 +83,21 @@ function RROverview() {
                     </div>
                     <div
                       style={{
-                        position: "relative",
+                        display: "flex",
+                        alignItems: "flex-start",
                         marginRight: "-720px",
                         marginTop: "-50px",
                       }}
                     >
                       <Button
                         color="primary"
-                        className="btn btn-primary waves-effect waves-light position-absolute top-0"
+                        className="btn btn-primary waves-effect waves-light"
                         onClick={() => handleReviewPage(rowData)}
                       >
                         Review
                       </Button>
                     </div>
+
                     <div
                       style={{
                         marginRight: "150px",

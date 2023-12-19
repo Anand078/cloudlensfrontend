@@ -1,23 +1,20 @@
-import PropTypes from "prop-types";
-import React from "react";
+import PropTypes from "prop-types"
+import React from "react"
 
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
-import logodarkImg from "../../assets/images/logo-light.png";
-import logosmImg from "../../assets/images/logo-sm.png";
-import logolightImg from "../../assets/images/logo-light.png";
+// import logodarkImg from "../../assets/images/logo-light.png"
+import logosmImg from "../../assets/images/logo-sm.png"
+// import logolightImg from "../../assets/images/logo-light.png"
 
 //i18n
 
 // Redux Store
-import {
-  toggleLeftmenu,
-  changeSidebarType,
-} from "../../store/actions";
+import { toggleLeftmenu, changeSidebarType } from "../../store/actions"
 
-const Header = (props) => {
+const Header = props => {
   function toggleFullscreen() {
     if (
       !document.fullscreenElement &&
@@ -26,32 +23,32 @@ const Header = (props) => {
     ) {
       // current working methods
       if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen()
       } else if (document.documentElement.mozRequestFullScreen) {
-        document.documentElement.mozRequestFullScreen();
+        document.documentElement.mozRequestFullScreen()
       } else if (document.documentElement.webkitRequestFullscreen) {
         document.documentElement.webkitRequestFullscreen(
           Element.ALLOW_KEYBOARD_INPUT
-        );
+        )
       }
     } else {
       if (document.cancelFullScreen) {
-        document.cancelFullScreen();
+        document.cancelFullScreen()
       } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
+        document.mozCancelFullScreen()
       } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
+        document.webkitCancelFullScreen()
       }
     }
   }
 
   function tToggle() {
-    var body = document.body;
+    var body = document.body
     if (window.screen.width <= 992) {
-      body.classList.toggle("sidebar-enable");
+      body.classList.toggle("sidebar-enable")
     } else {
-      body.classList.toggle("vertical-collpsed");
-      body.classList.toggle("sidebar-enable");
+      body.classList.toggle("vertical-collpsed")
+      body.classList.toggle("sidebar-enable")
     }
   }
 
@@ -66,7 +63,8 @@ const Header = (props) => {
                   <img src={logosmImg} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logodarkImg} alt="" height="17" />
+                  <span height="17">Cloud Lens</span>
+                  {/* <img src={logodarkImg} alt="" height="17" /> */}
                 </span>
               </Link>
 
@@ -75,7 +73,16 @@ const Header = (props) => {
                   <img src={logosmImg} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logolightImg} alt="" height="18" />
+                  <span
+                    height="30"
+                    style={{
+                      fontFamily: "Sarabun",
+                      fontSize: "20px",
+                      color: "#fff",
+                    }}
+                  >
+                    Cloud Lens
+                  </span>
                 </span>
               </Link>
             </div>
@@ -84,7 +91,7 @@ const Header = (props) => {
               className="btn btn-sm px-3 font-size-24 header-item waves-effect"
               id="vertical-menu-btn"
               onClick={() => {
-                tToggle();
+                tToggle()
               }}
               data-target="#topnav-menu-content"
             >
@@ -97,7 +104,7 @@ const Header = (props) => {
               <button
                 type="button"
                 onClick={() => {
-                  toggleFullscreen();
+                  toggleFullscreen()
                 }}
                 className="btn header-item noti-icon waves-effect"
                 data-toggle="fullscreen"
@@ -109,8 +116,8 @@ const Header = (props) => {
         </div>
       </header>
     </React.Fragment>
-  );
-};
+  )
+}
 
 Header.propTypes = {
   changeSidebarType: PropTypes.func,
@@ -118,15 +125,14 @@ Header.propTypes = {
   leftSideBarType: PropTypes.any,
   t: PropTypes.any,
   toggleLeftmenu: PropTypes.func,
-};
+}
 
-const mapStatetoProps = (state) => {
-  const { layoutType, leftMenu, leftSideBarType } =
-    state.Layout;
-  return { layoutType, leftMenu, leftSideBarType };
-};
+const mapStatetoProps = state => {
+  const { layoutType, leftMenu, leftSideBarType } = state.Layout
+  return { layoutType, leftMenu, leftSideBarType }
+}
 
 export default connect(mapStatetoProps, {
   toggleLeftmenu,
   changeSidebarType,
-})(Header);
+})(Header)
