@@ -76,7 +76,7 @@ function AccountOverview() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <h4 className="mt-0 header-title mb-4">Accounts Overview</h4>
+                <CardTitle className="h4 mb-4">Accounts Overview</CardTitle>
                   <div id="doughnut-chart" className="e-chart">
                     <PieChart accOverviewdata={accOverviewData} />
                   </div>

@@ -196,9 +196,14 @@ const ARBList = () => {
                             direction="left"
                             style={{ left: "-80%" }}
                           >
-                            <DropdownToggle>
+                            <DropdownToggle
+                              style={{
+                                background: "none",
+                                border: "none",
+                              }}
+                            >
                               <i
-                                className="ion ion-md-more"
+                                className="ion ion-ios-more"
                                 aria-hidden="true"
                               />
                             </DropdownToggle>
