@@ -12,6 +12,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap"
+import Select from "react-select"
 import Pagination from "react-js-pagination"
 import { useNavigate } from "react-router-dom"
 import ArcModal from "./ARBModal"
@@ -24,11 +25,13 @@ const ARBList = () => {
   const [itemsPerPage] = useState(10)
   const [editRowData, setEditRowData] = useState(null)
   const [initialData, setInitialData] = useState([])
+  const [selectedGroup, setSelectedGroup] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [deleteRowData, setDeleteRowData] = useState(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [rowDropdownOpen, setRowDropdownOpen] = useState({})
+  const [statusData, setStatusData] = useState([])
 
   const navigate = useNavigate()
 
@@ -37,12 +40,21 @@ const ARBList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
 
+  function handleSelectGroup(selectedGroup) {
+    setSelectedGroup(selectedGroup)
+  }
+
   const toggleDropdown = rowId => {
     setRowDropdownOpen(prevState => ({
       ...prevState,
       [rowId]: !prevState[rowId] || false,
     }))
   }
+
+  const optionGroup = statusData.map(statusItem => ({
+    label: statusItem.status,
+    value: statusItem.id,
+  }))
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
@@ -88,16 +100,35 @@ const ARBList = () => {
 
   const fetchData = async () => {
     try {
-      const [accSnapResp] = await Promise.all([fetch(baseUrl + "/arb")])
-      const accSnapData = await accSnapResp.json()
+      const [accSnapResp, statusResp] = await Promise.all([
+        fetch(baseUrl + "/arb"),
+        fetch(baseUrl + "/arbstatus"),
+      ])
+
+      if (!accSnapResp.ok || !statusResp.ok) {
+        throw new Error("Failed to fetch data")
+      }
+
+      const [accSnapData, arbStatusData] = await Promise.all([
+        accSnapResp.json(),
+        statusResp.json(),
+      ])
 
       const filteredData = accSnapData.data.filter(item =>
         Object.values(item).some(value =>
           value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
       )
+
       setData(filteredData)
       setInitialData(filteredData)
+
+      if (Array.isArray(arbStatusData.data)) {
+        setStatusData(arbStatusData.data)
+      } else {
+        setStatusData([])
+      }
+
       setIsLoading(false)
     } catch (error) {
       console.error("Error fetching data:", error)
@@ -120,6 +151,7 @@ const ARBList = () => {
   const handleNavigate = row => {
     navigate(`/arb/${row.projectname}/overview`, { state: row })
   }
+  console.log("anand", currentData)
   return (
     <>
       {isLoading ? (
@@ -167,6 +199,7 @@ const ARBList = () => {
                       <th scope="col">Auditor</th>
                       <th scope="col">Start Date</th>
                       <th scope="col">End Date</th>
+                      <th scope="col">Status</th>
                       <th scope="col">Project Score</th>
                       <th scope="col"></th>
                     </tr>
@@ -187,6 +220,15 @@ const ARBList = () => {
                         <td>{item.auditor}</td>
                         <td>{item.startdate}</td>
                         <td>{item.enddate}</td>
+                        <td>
+                          <Select
+                            value={optionGroup.find(
+                              option => option.value === item.statusid
+                            )}
+                            onChange={handleSelectGroup}
+                            options={optionGroup}
+                          />
+                        </td>
                         <td>{item.projectscore}</td>
 
                         <td>
