@@ -40,7 +40,48 @@ const ARBList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
 
-  function handleSelectGroup(selectedGroup) {
+  const handleChange = itemId => async selectedGroup => {
+    if (!itemId) {
+      return
+    }
+
+    setIsLoading(true)
+
+    if (selectedGroup) {
+      const arbStatusId = {
+        statusid: selectedGroup.value,
+      }
+
+      try {
+        const response = await fetch(baseUrl + "/arbstatus/" + itemId, {
+          method: "PUT",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(arbStatusId),
+        })
+
+        const result = await response.json()
+
+        if (result.success === true) {
+          console.log("Success")
+
+          fetchData()
+        } else {
+          console.log("Error while updating arbstatus data")
+        }
+      } catch (error) {
+        console.error("Error:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     setSelectedGroup(selectedGroup)
   }
 
@@ -225,7 +266,7 @@ const ARBList = () => {
                             value={optionGroup.find(
                               option => option.value === item.statusid
                             )}
-                            onChange={handleSelectGroup}
+                            onChange={handleChange(item.id)}
                             options={optionGroup}
                           />
                         </td>
