@@ -235,7 +235,7 @@ const SidebarContent = (props) => {
             <SideBarMenu props={props} config={AccConfig} />
             <SideBarMenu props={props} config={Arconfig} /> */}
 
-            <li style={{ margin: "100px 0", padding: 0 }}></li>
+            {/* <li style={{ margin: "100px 0", padding: 0 }}></li>
             <li className="menu-title">{("Extras")}</li>
             <li>
               <Link to="/#" className="has-arrow waves-effect">
@@ -415,7 +415,7 @@ const SidebarContent = (props) => {
                   <Link to="/pages-faqs">{("FAQs")}</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </ul>
         </div>
       </SimpleBar>
