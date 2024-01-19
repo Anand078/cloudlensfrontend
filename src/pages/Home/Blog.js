@@ -1,7 +1,18 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Table, Button, Row, Col, Spinner, Container, Input } from "reactstrap"
+import {
+  Table,
+  Button,
+  Row,
+  Col,
+  Spinner,
+  Container,
+  Input,
+  InputGroup,
+} from "reactstrap"
 import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
+import Flatpickr from "react-flatpickr"
+import "flatpickr/dist/themes/material_green.css"
 
 const useEditableState = (data, initialValue = false) => {
   return data.reduce((blog, item) => {
@@ -41,6 +52,7 @@ const Blog = () => {
   const [itemsPerPage] = useState(10)
   const [editableState, setEditableState] = useState({
     subject: useEditableState(data),
+    updatedon: useEditableState(data),
   })
 
   const [isSaving, setIsSaving] = useState(false)
@@ -54,6 +66,22 @@ const Blog = () => {
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
+  }
+
+  const handleDateChange = (id, date) => {
+    try {
+      const utcDateString = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000
+      ).toISOString()
+
+      setData(prevData =>
+        prevData.map(item =>
+          item.id === id ? { ...item, updatedon: utcDateString } : item
+        )
+      )
+    } catch (error) {
+      console.error("Error handling date change:", error)
+    }
   }
 
   const fetchData = async () => {
@@ -71,6 +99,7 @@ const Blog = () => {
       setInitialData(filteredData)
       setEditableState({
         subject: useEditableState(filteredData),
+        updatedon: useEditableState(filteredData),
       })
 
       setIsLoading(false)
@@ -129,9 +158,7 @@ const Blog = () => {
 
   const handleSubjectChange = (id, event) => {
     const updatedData = data.map(item =>
-      item.id === id
-        ? { ...item, subject: event.target.value, updatedon: new Date() }
-        : item
+      item.id === id ? { ...item, subject: event.target.value } : item
     )
     setData(updatedData)
   }
@@ -159,8 +186,10 @@ const Blog = () => {
       setIsLoading(false)
     }
   }
+
   const handleSave = async () => {
     try {
+      debugger
       setIsSaving(true)
 
       const modifiedData = data.filter(
@@ -171,11 +200,9 @@ const Blog = () => {
           )
       )
 
-      console.log("mod", modifiedData)
-
       if (modifiedData.length > 0) {
         await saveData(modifiedData)
-        fetchData()
+        await fetchData()
       } else {
         console.log("No changes to save.")
       }
@@ -187,7 +214,6 @@ const Blog = () => {
   }
 
   const saveData = async modifiedData => {
-    debugger
     try {
       const response = await fetch(baseUrl + "/blog", {
         method: "POST",
@@ -214,12 +240,31 @@ const Blog = () => {
   const formatDate = dateString => {
     const options = {
       year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     }
     return new Date(dateString).toLocaleString(undefined, options)
+  }
+
+  const EditableDate = ({ id, value, editable, onChange }) => {
+    const parsedDate = value ? new Date(value) : new Date()
+
+    return editable ? (
+      <InputGroup>
+        <Flatpickr
+          className="form-control d-block"
+          options={{
+            altInput: true,
+            altFormat: "Y-m-d",
+            dateFormat: "Y-m-d",
+          }}
+          value={parsedDate}
+          onChange={date => onChange(id, date[0])}
+        />
+      </InputGroup>
+    ) : (
+      formatDate(parsedDate)
+    )
   }
 
   return (
@@ -273,59 +318,74 @@ const Blog = () => {
                 >
                   <thead>
                     <tr>
-                      <th
-                        style={{
-                          width: "20%",
-                        }}
-                        scope="col"
-                      >
-                        Date
-                      </th>
-                      <th
-                        style={{
-                          width: "80%",
-                        }}
-                        scope="col"
-                      >
-                        Subject
-                      </th>
+                      <th style={{ width: "80%" }}>Subject</th>
+                      <th style={{ width: "20%" }}>Publish Date</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentData.map(item => (
-                      <tr key={item.id}>
-                        <td className="text-left">
-                          {formatDate(item.updatedon)}
-                        </td>
-                        <td
-                          onDoubleClick={() =>
-                            handleEditToggle("subject", item.id)
-                          }
-                          style={{
-                            width: "80%",
-                            whiteSpace: "pre-line",
-                          }}
-                        >
-                          {editableState.subject[item.id] ? (
-                            <EditableInput
-                              id={item.id}
-                              value={item.subject}
-                              editable={editableState.subject[item.id]}
-                              onChange={e => handleSubjectChange(item.id, e)}
-                              onBlur={() => handleBlur(item.id)}
-                              inputRef={ref => handleInputRef(item.id, ref)}
+                    {currentData.map((item, index) => {
+                      console.log("Current Item:", item)
+                      console.log("Index:", index)
+
+                      if (!item) {
+                        console.error("Item is undefined or null:", item)
+                        return null
+                      }
+
+                      const { id, subject, updatedon } = item
+
+                      console.log("ID:", id)
+                      console.log("Subject:", subject)
+                      console.log("UpdatedOn:", updatedon)
+
+                      return (
+                        <tr key={id}>
+                          <td
+                            onDoubleClick={() =>
+                              handleEditToggle("subject", id)
+                            }
+                            style={{
+                              width: "80%",
+                              whiteSpace: "pre-line",
+                            }}
+                          >
+                            {editableState.subject[id] ? (
+                              <EditableInput
+                                id={id}
+                                value={subject}
+                                editable={editableState.subject[id]}
+                                onChange={e => handleSubjectChange(id, e)}
+                                onBlur={() => handleBlur(id)}
+                                inputRef={ref => handleInputRef(id, ref)}
+                              />
+                            ) : (
+                              subject
+                            )}
+                          </td>
+                          <td
+                            onDoubleClick={() =>
+                              handleEditToggle("updatedon", id)
+                            }
+                            style={{ width: "20%" }}
+                          >
+                            <EditableDate
+                              id={id}
+                              value={updatedon || new Date()}
+                              editable={editableState.updatedon[id]}
+                              onChange={(id, date) =>
+                                handleDateChange(id, date)
+                              }
                             />
-                          ) : (
-                            item.subject
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
               </div>
             </Col>
           </Row>
+
           <Row className="mt-3">
             <Col style={{ display: "flex", justifyContent: "end" }}>
               <Pagination
