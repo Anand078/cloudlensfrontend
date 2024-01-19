@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Table, Button, Row, Col, Spinner, Container, Input, InputGroup } from "reactstrap"
+import {
+  Table,
+  Button,
+  Row,
+  Col,
+  Spinner,
+  Container,
+  Input,
+  InputGroup,
+} from "reactstrap"
 import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
 import Flatpickr from "react-flatpickr"
@@ -379,7 +388,7 @@ const TechSessions = () => {
                           onDoubleClick={() =>
                             handleEditToggle("updatedon", item.id)
                           }
-                          style={{ width: "20%" }}
+                          style={{ width: "15%" }}
                         >
                           <EditableDate
                             id={item.id}
@@ -393,10 +402,11 @@ const TechSessions = () => {
                             handleEditToggle("links", item.id)
                           }
                           style={{
-                            width: "20%",
-                            whiteSpace: "nowrap", // Add this style to prevent line breaks
-                            overflow: "hidden", // Add this style to handle overflow
-                            textOverflow: "ellipsis", // Add this style to show an ellipsis for overflow
+                            width: "25%",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            alignItems: "center",
                           }}
                         >
                           {editableState.links[item.id] ? (
@@ -408,10 +418,12 @@ const TechSessions = () => {
                               onBlur={() => handleBlur(item.id)}
                               inputRef={ref => handleInputRef(item.id, ref)}
                             />
-                          ) : (
-                            <a href={`${item.link}`} target="_blank">
-                              Link
+                          ) : item.link ? (
+                            <a href={item.link} target="_blank">
+                              <i className="fas fa-external-link-alt"></i>
                             </a>
+                          ) : (
+                            <i className="fas fa-unlink"></i>
                           )}
                         </td>
                       </tr>
