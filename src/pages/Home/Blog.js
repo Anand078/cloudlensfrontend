@@ -126,6 +126,7 @@ const Blog = () => {
     setEditableState(prevState => ({
       ...prevState,
       subject: { ...prevState.subject, [newId]: true },
+      updatedon: { ...prevState.updatedon, [newId]: true },
     }))
   }
 
@@ -167,6 +168,7 @@ const Blog = () => {
     setEditableState(prevState => ({
       ...prevState,
       subject: { ...prevState.subject, [id]: false },
+      updatedon: { ...prevState.updatedon, [id]: false },
     }))
   }
 
@@ -324,20 +326,12 @@ const Blog = () => {
                   </thead>
                   <tbody>
                     {currentData.map((item, index) => {
-                      console.log("Current Item:", item)
-                      console.log("Index:", index)
-
                       if (!item) {
                         console.error("Item is undefined or null:", item)
                         return null
                       }
 
                       const { id, subject, updatedon } = item
-
-                      console.log("ID:", id)
-                      console.log("Subject:", subject)
-                      console.log("UpdatedOn:", updatedon)
-
                       return (
                         <tr key={id}>
                           <td

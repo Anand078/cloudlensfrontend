@@ -35,7 +35,7 @@ const Tabs = () => {
               toggleCustom("1")
             }}
           >
-            <span className="d-none d-sm-block">Blog</span>
+            <span className="d-none d-sm-block">Blogs/Whitepapers</span>
           </NavLink>
         </NavItem>
         <NavItem>

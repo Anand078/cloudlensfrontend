@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Table, Button, Row, Col, Spinner, Container, Input } from "reactstrap"
+import { Table, Button, Row, Col, Spinner, Container, Input, InputGroup } from "reactstrap"
 import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
+import Flatpickr from "react-flatpickr"
+import "flatpickr/dist/themes/material_green.css"
 
 const useEditableState = (data, initialValue = false) => {
   return data.reduce((ts, item) => {
@@ -42,6 +44,7 @@ const TechSessions = () => {
   const [editableState, setEditableState] = useState({
     topics: useEditableState(data),
     links: useEditableState(data),
+    updatedon: useEditableState(data),
   })
   const [isSaving, setIsSaving] = useState(false)
   const [initialData, setInitialData] = useState([])
@@ -52,6 +55,22 @@ const TechSessions = () => {
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentData = data.slice(indexOfFirstItem, indexOfLastItem)
+
+  const handleDateChange = (id, date) => {
+    try {
+      const utcDateString = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000
+      ).toISOString()
+
+      setData(prevData =>
+        prevData.map(item =>
+          item.id === id ? { ...item, updatedon: utcDateString } : item
+        )
+      )
+    } catch (error) {
+      console.error("Error handling date change:", error)
+    }
+  }
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber)
@@ -73,6 +92,7 @@ const TechSessions = () => {
       setEditableState({
         topics: useEditableState(filteredData),
         links: useEditableState(filteredData),
+        updatedon: useEditableState(filteredData),
       })
 
       setIsLoading(false)
@@ -101,6 +121,7 @@ const TechSessions = () => {
       ...prevState,
       topics: { ...prevState.topics, [newId]: true },
       links: { ...prevState.links, [newId]: true },
+      updatedon: { ...prevState.updatedon, [newId]: true },
     }))
   }
 
@@ -153,6 +174,7 @@ const TechSessions = () => {
       ...prevState,
       topics: { ...prevState.topics, [id]: false },
       links: { ...prevState.links, [id]: false },
+      updatedon: { ...prevState.updatedon, [id]: false },
     }))
   }
 
@@ -175,8 +197,6 @@ const TechSessions = () => {
             initialData.find(initialItem => initialItem.id === item.id)
           )
       )
-
-      console.log("mod", modifiedData)
 
       if (modifiedData.length > 0) {
         await saveData(modifiedData)
@@ -228,11 +248,31 @@ const TechSessions = () => {
       year: "numeric",
       month: "numeric",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
     }
     return new Date(dateString).toLocaleString(undefined, options)
   }
+
+  const EditableDate = ({ id, value, editable, onChange }) => {
+    const parsedDate = value ? new Date(value) : new Date()
+
+    return editable ? (
+      <InputGroup>
+        <Flatpickr
+          className="form-control d-block"
+          options={{
+            altInput: true,
+            altFormat: "Y-m-d",
+            dateFormat: "Y-m-d",
+          }}
+          value={parsedDate}
+          onChange={date => onChange(id, date[0])}
+        />
+      </InputGroup>
+    ) : (
+      formatDate(parsedDate)
+    )
+  }
+
   return (
     <>
       {isLoading ? (
@@ -286,19 +326,19 @@ const TechSessions = () => {
                     <tr>
                       <th
                         style={{
-                          width: "25%",
-                        }}
-                        scope="col"
-                      >
-                        Date
-                      </th>
-                      <th
-                        style={{
                           width: "50%",
                         }}
                         scope="col"
                       >
                         Topic
+                      </th>
+                      <th
+                        style={{
+                          width: "25%",
+                        }}
+                        scope="col"
+                      >
+                        Publish Date
                       </th>
                       <th
                         style={{
@@ -313,14 +353,6 @@ const TechSessions = () => {
                   <tbody>
                     {currentData.map(item => (
                       <tr key={item.id}>
-                        <td
-                          className="text-left"
-                          style={{
-                            width: "20%",
-                          }}
-                        >
-                          {formatDate(item.updatedon)}
-                        </td>
                         <td
                           onDoubleClick={() =>
                             handleEditToggle("topics", item.id)
@@ -342,6 +374,19 @@ const TechSessions = () => {
                           ) : (
                             item.topic
                           )}
+                        </td>
+                        <td
+                          onDoubleClick={() =>
+                            handleEditToggle("updatedon", item.id)
+                          }
+                          style={{ width: "20%" }}
+                        >
+                          <EditableDate
+                            id={item.id}
+                            value={item.updatedon || new Date()}
+                            editable={editableState.updatedon[item.id]}
+                            onChange={(id, date) => handleDateChange(id, date)}
+                          />
                         </td>
                         <td
                           onDoubleClick={() =>
