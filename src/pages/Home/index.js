@@ -30,7 +30,6 @@ import smimg2 from "../../assets/images/small/img-2.jpg"
 // Charts
 import Salesdonut from "../AllCharts/apex/salesdonut"
 import TabSessions from "./Tabs"
-
 import "chartist/dist/scss/chartist.scss"
 
 const Dashboard = props => {
@@ -230,15 +229,6 @@ const Dashboard = props => {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
-          <Row>
-            <Card>
-              <CardBody>
-                <Col lg={12}>
-                  <TabSessions />
-                </Col>
-              </CardBody>
-            </Card>
           </Row>
         </Container>
       </div>

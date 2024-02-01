@@ -61,6 +61,8 @@ import ArbOverview from "pages/ARB/Overview"
 import AccOverview from "pages/Accelerator/Overview"
 import ReviewOverview from "pages/ReviewOverview/Overview"
 import ReviewReport from "pages/ReviewReport/Overview"
+import Blog from "pages/Home/Blog"
+import TechSession from "pages/Home/TechSessions"
 const userRoutes = [
   //-----------------our routes----------------------------
   //Home
@@ -75,6 +77,10 @@ const userRoutes = [
   { path: "arb/:projectname/overview", component: <ReviewOverview /> },
   //Review Report
   { path: "arb/:projectname/review", component: <ReviewReport /> },
+  //Blog
+  { path: "/blogs", component: <Blog /> },
+  //Tech session
+  { path: "/techsessions", component: <TechSession /> },
   //-----------------our routes----------------------------
 
   //Charts

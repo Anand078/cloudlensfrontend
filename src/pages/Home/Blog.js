@@ -8,12 +8,14 @@ import {
   Container,
   Input,
   InputGroup,
+  Card,
+  CardBody,
 } from "reactstrap"
 import Pagination from "react-js-pagination"
 import isEqual from "lodash/isEqual"
 import Flatpickr from "react-flatpickr"
 import "flatpickr/dist/themes/material_green.css"
-
+import Breadcrumb from "../../components/Common/Breadcrumb" 
 const useEditableState = (data, initialValue = false) => {
   return data.reduce((blog, item) => {
     blog[item.id] = initialValue
@@ -270,7 +272,7 @@ const Blog = () => {
   }
 
   return (
-    <>
+    <React.Fragment>
       {isLoading ? (
         <div className="d-flex justify-content-center align-items-center">
           <Spinner type="grow" className="ms-2" color="success" />
@@ -279,123 +281,137 @@ const Blog = () => {
           <Spinner type="grow" className="ms-2" color="info" />
         </div>
       ) : (
-        <Container fluid>
-          <Row className="mb-2">
-            <Col
-              sm="12"
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                gap: "0.3rem",
-              }}
-            >
-              <Input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                style={{ width: "15rem" }}
-              />
-              <Button color="primary" onClick={handleAddRow}>
-                <i className="ion ion-md-add"></i>
-              </Button>
-              <Button color="primary" disabled={isSaving} onClick={handleSave}>
-                {isSaving ? (
-                  <Spinner size="sm" color="light" />
-                ) : (
-                  <i className="ion ion-md-save"></i>
-                )}
-              </Button>
-              <Button color="primary" onClick={handleReloadClick}>
-                <i className="mdi mdi-reload"></i>
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="12">
-              <div className="table-responsive">
-                <Table
-                  className="table table-hover table-centered table-nowrap mb-0"
-                  style={{ backgroundColor: "white" }}
-                >
-                  <thead>
-                    <tr>
-                      <th style={{ width: "80%" }}>Subject</th>
-                      <th style={{ width: "20%" }}>Publish Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentData.map((item, index) => {
-                      if (!item) {
-                        console.error("Item is undefined or null:", item)
-                        return null
-                      }
-
-                      const { id, subject, updatedon } = item
-                      return (
-                        <tr key={id}>
-                          <td
-                            onDoubleClick={() =>
-                              handleEditToggle("subject", id)
+        <div className="page-content custom-scrollbar">
+          <Container fluid>
+            <Breadcrumb
+              maintitle="Dashboard"
+              title="Blogs/Whitepapers"
+              breadcrumbItem="Overview"
+            />
+            <Card>
+              <CardBody>
+                <Row className="mb-2">
+                  <Col
+                    sm="12"
+                    style={{
+                      display: "flex",
+                      justifyContent: "end",
+                      gap: "0.3rem",
+                    }}
+                  >
+                    <Input
+                      type="text"
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      style={{ width: "15rem" }}
+                    />
+                    <Button color="primary" onClick={handleAddRow}>
+                      <i className="ion ion-md-add"></i>
+                    </Button>
+                    <Button
+                      color="primary"
+                      disabled={isSaving}
+                      onClick={handleSave}
+                    >
+                      {isSaving ? (
+                        <Spinner size="sm" color="light" />
+                      ) : (
+                        <i className="ion ion-md-save"></i>
+                      )}
+                    </Button>
+                    <Button color="primary" onClick={handleReloadClick}>
+                      <i className="mdi mdi-reload"></i>
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12">
+                    <div className="table-responsive">
+                      <Table
+                        className="table table-hover table-centered table-nowrap mb-0"
+                        style={{ backgroundColor: "white" }}
+                      >
+                        <thead>
+                          <tr>
+                            <th style={{ width: "80%" }}>Subject</th>
+                            <th style={{ width: "20%" }}>Publish Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentData.map((item, index) => {
+                            if (!item) {
+                              console.error("Item is undefined or null:", item)
+                              return null
                             }
-                            style={{
-                              width: "80%",
-                              whiteSpace: "pre-line",
-                            }}
-                          >
-                            {editableState.subject[id] ? (
-                              <EditableInput
-                                id={id}
-                                value={subject}
-                                editable={editableState.subject[id]}
-                                onChange={e => handleSubjectChange(id, e)}
-                                onBlur={() => handleBlur(id)}
-                                inputRef={ref => handleInputRef(id, ref)}
-                              />
-                            ) : (
-                              subject
-                            )}
-                          </td>
-                          <td
-                            onDoubleClick={() =>
-                              handleEditToggle("updatedon", id)
-                            }
-                            style={{ width: "20%" }}
-                          >
-                            <EditableDate
-                              id={id}
-                              value={updatedon || new Date()}
-                              editable={editableState.updatedon[id]}
-                              onChange={(id, date) =>
-                                handleDateChange(id, date)
-                              }
-                            />
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
 
-          <Row className="mt-3">
-            <Col style={{ display: "flex", justifyContent: "end" }}>
-              <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={itemsPerPage}
-                totalItemsCount={data.length}
-                pageRangeDisplayed={5}
-                itemClass="page-item"
-                linkClass="page-link"
-                onChange={handlePageChange}
-              />
-            </Col>
-          </Row>
-        </Container>
+                            const { id, subject, updatedon } = item
+                            return (
+                              <tr key={id}>
+                                <td
+                                  onDoubleClick={() =>
+                                    handleEditToggle("subject", id)
+                                  }
+                                  style={{
+                                    width: "80%",
+                                    whiteSpace: "pre-line",
+                                  }}
+                                >
+                                  {editableState.subject[id] ? (
+                                    <EditableInput
+                                      id={id}
+                                      value={subject}
+                                      editable={editableState.subject[id]}
+                                      onChange={e => handleSubjectChange(id, e)}
+                                      onBlur={() => handleBlur(id)}
+                                      inputRef={ref => handleInputRef(id, ref)}
+                                    />
+                                  ) : (
+                                    subject
+                                  )}
+                                </td>
+                                <td
+                                  onDoubleClick={() =>
+                                    handleEditToggle("updatedon", id)
+                                  }
+                                  style={{ width: "20%" }}
+                                >
+                                  <EditableDate
+                                    id={id}
+                                    value={updatedon || new Date()}
+                                    editable={editableState.updatedon[id]}
+                                    onChange={(id, date) =>
+                                      handleDateChange(id, date)
+                                    }
+                                  />
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="mt-3">
+                  <Col style={{ display: "flex", justifyContent: "end" }}>
+                    <Pagination
+                      activePage={currentPage}
+                      itemsCountPerPage={itemsPerPage}
+                      totalItemsCount={data.length}
+                      pageRangeDisplayed={5}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                      onChange={handlePageChange}
+                    />
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Container>
+        </div>
       )}
-    </>
+    </React.Fragment>
   )
 }
 
